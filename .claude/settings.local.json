@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(brew upgrade *)",
+      "Bash(claude *)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.hostg.xyz)",
+      "Bash(npm -v)"
+    ]
+  }
+}

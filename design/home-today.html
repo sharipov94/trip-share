@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TravelMate · Сегодня</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0814;
+    --bg-2:#140d22;
+    --ink:#f7f2ff;
+    --muted:#a89fc0;
+    --line:rgba(255,255,255,.08);
+    --card:rgba(255,255,255,.045);
+    --coral:#ff5d73;
+    --tangerine:#ff9d3d;
+    --magenta:#ff3d9a;
+    --violet:#7b5cff;
+    --cyan:#37e6c9;
+    --lime:#c6ff5e;
+    --grad-sun:linear-gradient(135deg,#ff3d9a 0%,#ff5d73 38%,#ff9d3d 100%);
+    --grad-night:linear-gradient(150deg,#7b5cff 0%,#ff3d9a 100%);
+    --grad-cyan:linear-gradient(135deg,#37e6c9 0%,#7b5cff 100%);
+    --r:26px;
+    --shadow:0 18px 40px -18px rgba(255,61,154,.55);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:#000;
+    font-family:"Hanken Grotesk",sans-serif;
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+    padding:24px 0;
+  }
+  /* ── device shell ── */
+  .phone{
+    width:390px;max-width:100vw;height:844px;max-height:96vh;
+    background:
+      radial-gradient(120% 80% at 80% -10%, rgba(255,61,154,.20), transparent 55%),
+      radial-gradient(110% 70% at -10% 0%, rgba(123,92,255,.22), transparent 50%),
+      var(--bg);
+    border-radius:46px;
+    position:relative;overflow:hidden;
+    box-shadow:0 50px 120px -30px rgba(255,61,154,.35),0 0 0 1px rgba(255,255,255,.04);
+    display:flex;flex-direction:column;
+  }
+  /* grain */
+  .phone::after{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:50;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  /* scrollable canvas */
+  .screen{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 18px 120px;scrollbar-width:none}
+  .screen::-webkit-scrollbar{display:none}
+
+  /* status bar */
+  .status{display:flex;justify-content:space-between;align-items:center;padding:16px 22px 4px;font-size:13px;font-weight:700;letter-spacing:.2px;color:var(--ink)}
+  .status .dots{display:flex;gap:5px;align-items:center}
+  .status .dots i{width:5px;height:5px;border-radius:50%;background:var(--ink);opacity:.6}
+
+  /* header */
+  .top{display:flex;align-items:flex-start;justify-content:space-between;padding:10px 4px 18px;animation:rise .6s .02s both}
+  .hello{font-size:13px;color:var(--muted);font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+  .trip{
+    font-family:"Unbounded",sans-serif;font-weight:900;font-size:30px;line-height:.96;
+    letter-spacing:-.5px;margin-top:5px;text-transform:uppercase;
+    background:var(--grad-sun);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .avatars{display:flex;align-items:center}
+  .avatars span{
+    width:34px;height:34px;border-radius:50%;border:2px solid var(--bg);margin-left:-10px;
+    display:grid;place-items:center;font-weight:800;font-size:13px;color:#1a1030;
+  }
+  .a1{background:var(--tangerine)}.a2{background:var(--cyan)}.a3{background:var(--lime)}
+  .a-more{background:rgba(255,255,255,.12);color:var(--ink)!important}
+
+  /* day banner / wrapped stat */
+  .day{
+    position:relative;border-radius:var(--r);padding:20px 22px;overflow:hidden;
+    background:var(--grad-night);box-shadow:var(--shadow);margin-bottom:18px;
+    animation:rise .6s .06s both;
+  }
+  .day::before{content:"";position:absolute;inset:0;background:
+    radial-gradient(60% 100% at 90% 10%,rgba(255,255,255,.28),transparent 60%);mix-blend-mode:overlay}
+  .day .row{display:flex;justify-content:space-between;align-items:flex-end;position:relative}
+  .day .lbl{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+  .day .big{font-family:"Unbounded";font-weight:900;font-size:46px;line-height:.85;letter-spacing:-1px;margin-top:6px}
+  .day .big small{font-size:18px;opacity:.6;font-weight:600}
+  .day .mini{text-align:right;font-size:12px;line-height:1.5;font-weight:600;opacity:.9}
+  .day .mini b{font-family:"Unbounded";font-weight:800;display:block;font-size:17px}
+
+  /* section title */
+  .sec{display:flex;align-items:center;gap:10px;margin:24px 4px 13px;animation:rise .6s both}
+  .sec h2{font-family:"Unbounded";font-weight:800;font-size:14px;letter-spacing:1px;text-transform:uppercase}
+  .sec .line{flex:1;height:1px;background:var(--line)}
+  .sec .cnt{font-size:11px;font-weight:800;color:var(--bg);background:var(--lime);padding:3px 9px;border-radius:20px}
+
+  /* activity cards */
+  .act{
+    background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 17px;
+    margin-bottom:11px;display:flex;gap:14px;align-items:center;position:relative;overflow:hidden;
+    animation:rise .55s both;
+  }
+  .act .time{
+    flex-shrink:0;width:58px;text-align:center;
+  }
+  .act .time b{font-family:"Unbounded";font-weight:800;font-size:18px;display:block;line-height:1}
+  .act .time s{font-size:10px;color:var(--muted);text-decoration:none;font-weight:700;letter-spacing:1px}
+  .act .bar{width:3px;align-self:stretch;border-radius:3px;background:var(--grad-sun)}
+  .act.night .bar{background:var(--grad-cyan)}
+  .act .body{flex:1;min-width:0}
+  .act .ttl{font-weight:800;font-size:16px;letter-spacing:-.2px}
+  .act .sub{font-size:12.5px;color:var(--muted);margin-top:3px;font-weight:500}
+  .badge{
+    display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;letter-spacing:.6px;
+    text-transform:uppercase;padding:4px 9px;border-radius:20px;margin-top:9px;
+  }
+  .badge.ok{background:rgba(55,230,201,.14);color:var(--cyan)}
+  .badge.ok::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+  /* voting */
+  .vote{display:flex;gap:7px;margin-top:11px}
+  .vote button{
+    flex:1;border:none;border-radius:14px;padding:9px 0;font-family:"Hanken Grotesk";
+    font-weight:800;font-size:12.5px;cursor:pointer;letter-spacing:.3px;transition:transform .15s,filter .15s;
+  }
+  .vote .go{background:var(--grad-sun);color:#fff}
+  .vote .no{background:rgba(255,255,255,.07);color:var(--muted)}
+  .vote button:active{transform:scale(.95)}
+  .vote .go:hover{filter:brightness(1.08)}
+  .who{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);font-weight:600;margin-top:9px}
+  .who .mini-av{display:flex}
+  .who .mini-av i{width:18px;height:18px;border-radius:50%;margin-left:-5px;border:1.5px solid var(--bg-2)}
+
+  /* debt card */
+  .debt{
+    border-radius:var(--r);padding:20px 22px;margin-top:4px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#ff5d73,#ff3d9a 70%,#7b5cff);box-shadow:var(--shadow);
+    animation:rise .55s both;
+  }
+  .debt::before{content:"€";position:absolute;right:-14px;bottom:-46px;font-family:"Unbounded";
+    font-weight:900;font-size:170px;opacity:.13;line-height:1}
+  .debt .k{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;opacity:.9}
+  .debt .v{font-family:"Unbounded";font-weight:900;font-size:27px;margin-top:7px;letter-spacing:-.5px;line-height:1.05}
+  .debt .v em{font-style:normal;opacity:.78}
+  .debt .pay{
+    margin-top:15px;display:inline-flex;align-items:center;gap:8px;background:#fff;color:#15102a;
+    border:none;font-family:"Hanken Grotesk";font-weight:800;font-size:14px;padding:12px 20px;border-radius:16px;
+    cursor:pointer;transition:transform .15s;position:relative;
+  }
+  .debt .pay:active{transform:scale(.96)}
+  .debt .pay svg{width:15px;height:15px}
+
+  /* moment strip */
+  .moment-h{display:flex;align-items:center;justify-content:space-between;margin:24px 4px 13px;animation:rise .6s both}
+  .moment-h h2{font-family:"Unbounded";font-weight:800;font-size:14px;letter-spacing:1px;text-transform:uppercase}
+  .moment-h span{font-size:11px;font-weight:800;color:var(--tangerine);letter-spacing:.5px}
+  .strip{display:flex;gap:10px;overflow-x:auto;padding:2px 4px 4px;scrollbar-width:none;animation:rise .55s both}
+  .strip::-webkit-scrollbar{display:none}
+  .shot{
+    flex-shrink:0;width:108px;height:142px;border-radius:20px;position:relative;overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .shot .g{position:absolute;inset:0}
+  .s1 .g{background:var(--grad-sun)}
+  .s2 .g{background:var(--grad-cyan)}
+  .s3 .g{background:linear-gradient(160deg,#ff9d3d,#ff3d9a)}
+  .shot::after{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");mix-blend-mode:overlay}
+  .shot .tag{position:absolute;left:9px;bottom:9px;font-size:10px;font-weight:800;background:rgba(0,0,0,.35);
+    backdrop-filter:blur(6px);padding:4px 8px;border-radius:10px;z-index:2}
+  .shot.more{display:grid;place-items:center;background:var(--card)}
+  .shot.more .plus{font-family:"Unbounded";font-weight:900;font-size:24px;color:var(--lime)}
+  .shot.more small{position:absolute;bottom:14px;font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px}
+
+  /* photo prompt game */
+  .prompt{
+    margin-top:22px;border-radius:var(--r);padding:20px;position:relative;overflow:hidden;
+    background:radial-gradient(120% 120% at 0% 0%,#c6ff5e 0%,#37e6c9 55%,#7b5cff 120%);
+    color:#10210e;box-shadow:0 18px 40px -18px rgba(198,255,94,.5);
+    animation:rise .55s both;
+  }
+  .prompt .pulse{position:absolute;inset:0;background:radial-gradient(40% 60% at 80% 20%,rgba(255,255,255,.6),transparent 60%);
+    animation:breathe 3s ease-in-out infinite}
+  .prompt .live{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:900;letter-spacing:1.5px;
+    background:#10210e;color:var(--lime);padding:4px 10px;border-radius:20px;position:relative}
+  .prompt .live i{width:6px;height:6px;border-radius:50%;background:var(--coral);animation:blink 1s infinite}
+  .prompt h3{font-family:"Unbounded";font-weight:900;font-size:21px;line-height:1.02;margin-top:13px;
+    letter-spacing:-.5px;position:relative;text-transform:uppercase}
+  .prompt p{font-size:12.5px;font-weight:600;margin-top:7px;opacity:.7;position:relative}
+  .prompt .snap{margin-top:15px;display:flex;align-items:center;gap:9px;background:#10210e;color:var(--lime);
+    border:none;font-family:"Hanken Grotesk";font-weight:800;font-size:14px;padding:13px 22px;border-radius:16px;
+    cursor:pointer;position:relative;transition:transform .15s}
+  .prompt .snap:active{transform:scale(.96)}
+  .prompt .timer{position:absolute;top:20px;right:20px;font-family:"Unbounded";font-weight:800;font-size:13px;
+    background:rgba(16,33,14,.15);padding:5px 11px;border-radius:20px}
+
+  /* bottom nav */
+  .nav{
+    position:absolute;left:14px;right:14px;bottom:16px;height:66px;z-index:40;
+    background:rgba(20,13,34,.72);backdrop-filter:blur(22px);border:1px solid var(--line);
+    border-radius:24px;display:flex;align-items:center;justify-content:space-around;
+    box-shadow:0 20px 40px -15px rgba(0,0,0,.7);
+  }
+  .nav a{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted);
+    font-size:9.5px;font-weight:700;letter-spacing:.3px;text-decoration:none;transition:color .2s}
+  .nav a svg{width:23px;height:23px;stroke-width:2}
+  .nav a.on{color:var(--ink)}
+  .nav a.on svg{stroke:url(#ng)}
+  .nav a.on::after{content:"";position:absolute;top:9px;width:34px;height:34px;border-radius:50%;
+    background:var(--grad-sun);filter:blur(16px);opacity:.55;z-index:-1}
+  .nav a{position:relative}
+
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  @keyframes breathe{0%,100%{opacity:.5}50%{opacity:1}}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+  /* stagger */
+  .act:nth-of-type(1){animation-delay:.10s}.act:nth-of-type(2){animation-delay:.16s}
+  .sec{animation-delay:.08s}
+</style>
+</head>
+<body>
+<div class="phone">
+  <!-- status -->
+  <div class="status">
+    <span>9:41</span>
+    <div class="dots"><i></i><i></i><i></i><span style="margin-left:4px">▮▮▮</span></div>
+  </div>
+
+  <div class="screen">
+    <!-- header -->
+    <div class="top">
+      <div>
+        <div class="hello">Привет, Никита 👋</div>
+        <div class="trip">Барселона<br>2027</div>
+      </div>
+      <div class="avatars">
+        <span class="a1">А</span><span class="a2">М</span><span class="a3">Д</span><span class="a-more">+2</span>
+      </div>
+    </div>
+
+    <!-- day / wrapped band -->
+    <div class="day">
+      <div class="row">
+        <div>
+          <div class="lbl">День в разгаре</div>
+          <div class="big">3<small>/7</small></div>
+        </div>
+        <div class="mini">
+          <b>94 км</b>пешком
+          <b style="margin-top:8px">143</b>фото
+        </div>
+      </div>
+    </div>
+
+    <!-- activities -->
+    <div class="sec"><h2>Сегодня</h2><div class="line"></div><span class="cnt">2</span></div>
+
+    <div class="act">
+      <div class="bar"></div>
+      <div class="time"><b>14:00</b><s>ДЕНЬ</s></div>
+      <div class="body">
+        <div class="ttl">Музей Пикассо</div>
+        <div class="sub">Carrer de Montcada, 15–23</div>
+        <span class="badge ok">Подтверждена · идут 4</span>
+      </div>
+    </div>
+
+    <div class="act night">
+      <div class="bar"></div>
+      <div class="time"><b>20:30</b><s>ВЕЧЕР</s></div>
+      <div class="body">
+        <div class="ttl">Ужин · El Xampanyet</div>
+        <div class="sub">Тапас-бар · ≈ €35 с человека</div>
+        <div class="vote">
+          <button class="go">Иду</button>
+          <button class="no">Не иду</button>
+        </div>
+        <div class="who">
+          <div class="mini-av">
+            <i style="background:var(--tangerine)"></i><i style="background:var(--cyan)"></i><i style="background:var(--lime)"></i>
+          </div>
+          3 уже проголосовали
+        </div>
+      </div>
+    </div>
+
+    <!-- debt -->
+    <div class="sec"><h2>Долги</h2><div class="line"></div></div>
+    <div class="debt">
+      <div class="k">Надо вернуть</div>
+      <div class="v">Ты должен Ане <em>·</em> €42</div>
+      <button class="pay">
+        Перевести
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M13 6l6 6-6 6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <!-- moment -->
+    <div class="moment-h"><h2>Момент дня</h2><span>5 РАКУРСОВ ✦</span></div>
+    <div class="strip">
+      <div class="shot s1"><div class="g"></div><div class="tag">Аня</div></div>
+      <div class="shot s2"><div class="g"></div><div class="tag">Макс</div></div>
+      <div class="shot s3"><div class="g"></div><div class="tag">Даша</div></div>
+      <div class="shot more"><div class="plus">+2</div><small>ЕЩЁ</small></div>
+    </div>
+
+    <!-- photo prompt game -->
+    <div class="prompt">
+      <div class="pulse"></div>
+      <div class="timer">⏱ 4:59</div>
+      <span class="live"><i></i>LIVE</span>
+      <h3>Сделай фото<br>момента 🔥</h3>
+      <p>Первый, кто снимет — забирает бейдж дня</p>
+      <button class="snap">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L19 6h0a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8Z" stroke-linejoin="round"/><circle cx="12" cy="12.5" r="3.4"/></svg>
+        Снять сейчас
+      </button>
+    </div>
+  </div>
+
+  <!-- bottom nav -->
+  <nav class="nav">
+    <svg width="0" height="0"><defs><linearGradient id="ng" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff3d9a"/><stop offset="1" stop-color="#ff9d3d"/></linearGradient></defs></svg>
+    <a class="on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5Z"/></svg>Сегодня</a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Поездки</a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 8h7a2.5 2.5 0 0 1 0 5H9a2.5 2.5 0 0 0 0 5h8"/></svg>Расходы</a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="m4 18 5-4 4 3 3-2 4 3"/></svg>Фото</a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>Профиль</a>
+  </nav>
+</div>
+</body>
+</html>

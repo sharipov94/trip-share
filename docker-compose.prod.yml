@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: travelmate
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: travelmate
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U travelmate']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ['redis-server', '--maxmemory', '128mb', '--maxmemory-policy', 'noeviction']
+    volumes:
+      - redisdata:/data
+
+  api:
+    build: ./server
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://travelmate:${DB_PASSWORD}@db:5432/travelmate
+      UPLOAD_DIR: /app/uploads
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - ./uploads:/app/uploads # загруженные фото; Caddy раздаёт их как /uploads/*
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    ports:
+      - '127.0.0.1:3000:3000' # только локально; наружу проксирует Caddy
+
+volumes:
+  pgdata:
+  redisdata:
