@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Screen, TopBar, Loading } from '../components'
 import { useTrip, useUpdateTrip, useDeleteTrip } from '../api/queries'
 import { tg } from '../lib/tg'
+import { todayStr } from '../lib/date'
 
 const STATUSES = [
   { id: 'planning', label: 'Планируется' },
@@ -52,8 +53,8 @@ export default function TripEdit() {
         <>
           <div className="field"><label>Название</label><input value={title} onChange={(e) => setTitle(e.target.value)} /></div>
           <div style={{ display: 'flex', gap: 11 }}>
-            <div className="field" style={{ flex: 1 }}><label>Начало</label><input type="date" min={new Date().toISOString().slice(0, 10)} value={start} onChange={(e) => setStart(e.target.value)} /></div>
-            <div className="field" style={{ flex: 1 }}><label>Конец</label><input type="date" min={start || new Date().toISOString().slice(0, 10)} value={end} onChange={(e) => setEnd(e.target.value)} /></div>
+            <div className="field" style={{ flex: 1 }}><label>Начало</label><input type="date" min={todayStr()} value={start} onChange={(e) => setStart(e.target.value)} /></div>
+            <div className="field" style={{ flex: 1 }}><label>Конец</label><input type="date" min={start || todayStr()} value={end} onChange={(e) => setEnd(e.target.value)} /></div>
           </div>
           {start || end ? (
             <div className="field">

@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Screen, TopBar } from '../components'
 import { useCreateTrip } from '../api/queries'
+import { todayStr } from '../lib/date'
 
 const types = [
   { id: 'flight', label: '✈️ Самолёт' },
@@ -41,8 +42,8 @@ export default function TripNew() {
         <input placeholder="Барселона 2027" value={title} onChange={(e) => setTitle(e.target.value)} />
       </div>
       <div style={{ display: 'flex', gap: 11 }}>
-        <div className="field" style={{ flex: 1 }}><label>Начало</label><input type="date" min={new Date().toISOString().slice(0, 10)} value={start} onChange={(e) => setStart(e.target.value)} /></div>
-        <div className="field" style={{ flex: 1 }}><label>Конец</label><input type="date" min={start || new Date().toISOString().slice(0, 10)} value={end} onChange={(e) => setEnd(e.target.value)} /></div>
+        <div className="field" style={{ flex: 1 }}><label>Начало</label><input type="date" min={todayStr()} value={start} onChange={(e) => setStart(e.target.value)} /></div>
+        <div className="field" style={{ flex: 1 }}><label>Конец</label><input type="date" min={start || todayStr()} value={end} onChange={(e) => setEnd(e.target.value)} /></div>
       </div>
 
       <div className="field">

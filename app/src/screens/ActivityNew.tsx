@@ -1,13 +1,16 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Screen, TopBar } from '../components'
-import { useActiveTripId, useCreateActivity } from '../api/queries'
-
-const today = new Date().toISOString().slice(0, 10)
+import { useActiveTripId, useActiveTrip, useCreateActivity } from '../api/queries'
+import { todayStr } from '../lib/date'
 
 export default function ActivityNew() {
   const nav = useNavigate()
   const tripId = useActiveTripId()
+  const { data: trip } = useActiveTrip()
+  // активность — в пределах поездки: не раньше старта, не позже конца
+  const minDate = trip?.startDate || todayStr()
+  const maxDate = trip?.endDate || undefined
   const [title, setTitle] = useState('')
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
@@ -37,7 +40,7 @@ export default function ActivityNew() {
 
       <div className="field"><label>Название</label><input placeholder="Музей Пикассо" value={title} onChange={(e) => setTitle(e.target.value)} /></div>
       <div style={{ display: 'flex', gap: 11 }}>
-        <div className="field" style={{ flex: 1 }}><label>Дата</label><input type="date" min={today} value={date} onChange={(e) => setDate(e.target.value)} /></div>
+        <div className="field" style={{ flex: 1 }}><label>Дата</label><input type="date" min={minDate} max={maxDate} value={date} onChange={(e) => setDate(e.target.value)} /></div>
         <div className="field" style={{ flex: 1 }}><label>Время</label><input type="time" value={time} onChange={(e) => setTime(e.target.value)} /></div>
       </div>
       <div className="field"><label>Описание</label><input placeholder="Что и где" value={desc} onChange={(e) => setDesc(e.target.value)} /></div>
