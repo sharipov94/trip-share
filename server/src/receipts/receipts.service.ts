@@ -26,7 +26,7 @@ export class ReceiptsService {
 
     const tmp = join(tmpdir(), randomUUID())
     await fs.writeFile(tmp, file.buffer)
-    let text = ''
+    let text: string
     try {
       text = await tesseract.recognize(tmp, { lang: 'rus+eng', oem: 1, psm: 6 })
     } catch (e) {

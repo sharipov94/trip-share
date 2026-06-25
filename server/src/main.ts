@@ -13,7 +13,6 @@ async function bootstrap() {
   )
   const port = process.env.PORT ? Number(process.env.PORT) : 3000
   await app.listen(port)
-  // eslint-disable-next-line no-console
   console.log(`TravelMate API → http://localhost:${port}/api/v1`)
 }
 bootstrap()

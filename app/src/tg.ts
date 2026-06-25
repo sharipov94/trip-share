@@ -19,8 +19,14 @@ interface WebApp {
   HapticFeedback?: { impactOccurred(style: Haptic): void; notificationOccurred(t: 'error' | 'success' | 'warning'): void }
 }
 
+declare global {
+  interface Window {
+    Telegram?: { WebApp?: WebApp }
+  }
+}
+
 const wa: WebApp | undefined =
-  typeof window !== 'undefined' ? (window as any).Telegram?.WebApp : undefined
+  typeof window !== 'undefined' ? window.Telegram?.WebApp : undefined
 
 export const tg = {
   /** true только когда запущено реально из Telegram (есть initData). */

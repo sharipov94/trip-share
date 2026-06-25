@@ -53,7 +53,7 @@ export default function Bingo() {
                 }}
               >
                 {c.photoUrl && (
-                  <img src={c.photoUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: (c as any).uploading ? 0.55 : 1 }} />
+                  <img src={c.photoUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: c.uploading ? 0.55 : 1 }} />
                 )}
                 <div style={{ position: 'relative', zIndex: 1, textShadow: c.photoUrl ? '0 1px 4px rgba(0,0,0,.6)' : 'none', color: c.photoUrl ? '#fff' : undefined }}>
                   {c.done && !c.photoUrl && <div style={{ fontSize: 18, marginBottom: 3 }}>✓</div>}

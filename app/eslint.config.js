@@ -20,6 +20,9 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      // Syncing local form state from async-loaded server data is intentional here.
+      // Keep it visible as a warning rather than a hard error.
+      'react-hooks/set-state-in-effect': 'warn',
     },
   },
 )

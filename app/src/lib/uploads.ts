@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query'
 import { compressImage } from './image'
-import { memories, bingo } from '../api/endpoints'
+import { memories, bingo, type BingoState } from '../api/endpoints'
 
 type Photo = { id: string; url: string; author: string; uploading?: boolean }
 
@@ -29,12 +29,12 @@ export function uploadMemory(qc: QueryClient, tripId: string, file: File, phase?
 /** Фоновая загрузка фото в клетку bingo с оптимистичным превью. */
 export function uploadBingo(qc: QueryClient, tripId: string, key: string, file: File) {
   const localUrl = URL.createObjectURL(file)
-  qc.setQueryData<any>(['bingo', tripId], (old: any) => {
+  qc.setQueryData<BingoState>(['bingo', tripId], (old) => {
     if (!old) return old
     return {
       ...old,
-      tasks: old.tasks.map((t: any) => (t.key === key ? { ...t, done: true, photoUrl: localUrl, uploading: true } : t)),
-      completed: old.tasks.filter((t: any) => t.done || t.key === key).length,
+      tasks: old.tasks.map((t) => (t.key === key ? { ...t, done: true, photoUrl: localUrl, uploading: true } : t)),
+      completed: old.tasks.filter((t) => t.done || t.key === key).length,
     }
   })
   ;(async () => {
