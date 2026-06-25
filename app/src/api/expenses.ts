@@ -22,6 +22,13 @@ export const expenses = {
       payer: names[b.payerId] ?? 'Участник', amount: Number(b.amount), cur: currencySymbol(b.currency),
     }))
   },
+  /** Все расходы по всем поездкам пользователя (агрегация на фронте). */
+  async all(trips: { id: string; title: string }[]) {
+    const per = await Promise.all(
+      trips.map(async (t) => (await expenses.list(t.id)).map((e) => ({ ...e, tripId: t.id, tripTitle: t.title }))),
+    )
+    return per.flat()
+  },
   async create(tripId: string, body: { amount: number; currency: string; category?: string; title?: string }) {
     if (MOCK) return wait({ ok: true })
     return api(`/trips/${tripId}/expenses`, {

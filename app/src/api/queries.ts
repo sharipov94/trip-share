@@ -6,6 +6,7 @@ import { auth } from './auth'
 import { memories } from './memories'
 import { receipts } from './receipts'
 import { bingo } from './bingo'
+import { resolveCurrentTrip, setCurrentTripId } from '../lib/currentTrip'
 import type { Trip } from '../types'
 
 export const qk = {
@@ -18,19 +19,42 @@ export const qk = {
   memories: (id: string) => ['memories', id] as const,
 }
 
-/** id активной поездки (первая в списке) — для bottom-nav экранов без :id. */
-export function useActiveTripId(): string {
+/** id текущей поездки — из localStorage, иначе первая активная (см. lib/currentTrip). */
+export function useCurrentTripId(): string {
   const { data } = useTrips()
-  return data?.[0]?.id ?? ''
+  return resolveCurrentTrip(data ?? [])
 }
 
-/** Активная поездка целиком (с участниками) — для расчёта деления. */
-export function useActiveTrip() {
-  const id = useActiveTripId()
-  return useTrip(id)
+/** Сменить текущую поездку (вызывается при входе в поездку). */
+export function useSetCurrentTrip() {
+  const qc = useQueryClient()
+  return (id: string) => {
+    setCurrentTripId(id)
+    qc.invalidateQueries({ queryKey: ['trip'] })
+  }
 }
+
+/** Текущая поездка целиком (с участниками) — для расчёта деления. */
+export function useCurrentTrip() {
+  return useTrip(useCurrentTripId())
+}
+
+// обратная совместимость со старыми экранами (Home/Balance/Activity*/Invite…)
+export const useActiveTripId = useCurrentTripId
+export const useActiveTrip = useCurrentTrip
 
 export const useTrips = () => useQuery({ queryKey: qk.trips, queryFn: trips.list })
+
+/** Все расходы по всем поездкам (глобальный раздел «Финансы»). */
+export function useAllExpenses() {
+  const { data } = useTrips()
+  const list = (data ?? []).map((t) => ({ id: t.id, title: t.title }))
+  return useQuery({
+    queryKey: ['all-expenses', list.map((t) => t.id)],
+    queryFn: () => expenses.all(list),
+    enabled: list.length > 0,
+  })
+}
 export const useTrip = (id: string) =>
   useQuery({ queryKey: qk.trip(id), queryFn: () => trips.get(id), enabled: !!id })
 export const useBalance = (id: string) =>

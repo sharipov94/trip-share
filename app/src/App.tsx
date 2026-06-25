@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { tg } from './lib/tg'
@@ -7,7 +7,13 @@ import { trips } from './api/trips'
 import Onboarding from './screens/Onboarding'
 import Home from './screens/Home'
 import Trips from './screens/Trips'
-import TripDetails from './screens/TripDetails'
+import Finance from './screens/Finance'
+import TripShell from './screens/trip/TripShell'
+import Plan from './screens/trip/Plan'
+import TripExpenses from './screens/trip/TripExpenses'
+import TripPhotos from './screens/trip/TripPhotos'
+import Members from './screens/trip/Members'
+import Summary from './screens/trip/Summary'
 import TripNew from './screens/TripNew'
 import TripEdit from './screens/TripEdit'
 import Invite from './screens/Invite'
@@ -29,7 +35,7 @@ import ProfileEdit from './screens/ProfileEdit'
 import NotificationSettings from './screens/NotificationSettings'
 import HealthSettings from './screens/HealthSettings'
 
-const ROOT = ['/', '/trips', '/expenses', '/memories', '/profile']
+const ROOT = ['/', '/trips', '/finance', '/profile']
 
 /** Управляет нативной кнопкой «Назад» Telegram в зависимости от роута. */
 function TelegramChrome() {
@@ -85,12 +91,19 @@ export default function App() {
           <Route path="/splash" element={<Splash />} />
 
           <Route path="/trips" element={<Trips />} />
+          <Route path="/finance" element={<Finance />} />
           <Route path="/trip/new" element={<TripNew />} />
           <Route path="/trip/:id/edit" element={<TripEdit />} />
-          <Route path="/trip/:id" element={<TripDetails />} />
+          <Route path="/trip/:id" element={<TripShell />}>
+            <Route index element={<Navigate to="plan" replace />} />
+            <Route path="plan" element={<Plan />} />
+            <Route path="expenses" element={<TripExpenses />} />
+            <Route path="photos" element={<TripPhotos />} />
+            <Route path="members" element={<Members />} />
+            <Route path="summary" element={<Summary />} />
+          </Route>
           <Route path="/invite" element={<Invite />} />
 
-          <Route path="/expenses" element={<TripDetails initialTab="expenses" showTabs={false} />} />
           <Route path="/expense/new" element={<ExpenseNew />} />
           <Route path="/expense/:id" element={<ExpenseDetails />} />
           <Route path="/receipt" element={<Receipt />} />
@@ -102,7 +115,6 @@ export default function App() {
           <Route path="/activity/:id/complete" element={<ActivityComplete />} />
           <Route path="/activity/:id" element={<ActivityDetails />} />
 
-          <Route path="/memories" element={<TripDetails initialTab="memories" showTabs={false} />} />
           <Route path="/upload" element={<PhotoUpload />} />
           <Route path="/bingo" element={<Bingo />} />
 

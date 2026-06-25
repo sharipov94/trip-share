@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { tg } from '../lib/tg'
 import { Icon } from './icons'
 import { BottomNav } from './nav'
+import { CreateFab } from './CreateFab'
 
 /* шапка вложенного экрана с кнопкой назад */
 export function TopBar({ title, onBack, right }: { title: string; onBack?: () => void; right?: ReactNode }) {
@@ -29,6 +30,7 @@ export function Screen({ children, nav = true }: { children: ReactNode; nav?: bo
       <div className="screen fade-up" key={loc.pathname}>
         {children}
       </div>
+      {nav && <CreateFab />}
       {nav && <BottomNav />}
     </>
   )

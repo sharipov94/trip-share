@@ -19,8 +19,7 @@ export function BottomNav() {
   const items = [
     { to: '/', icon: Icon.home, label: 'Сегодня', end: true },
     { to: '/trips', icon: Icon.trips, label: 'Поездки' },
-    { to: '/expenses', icon: Icon.money, label: 'Расходы' },
-    { to: '/memories', icon: Icon.photo, label: 'Фото' },
+    { to: '/finance', icon: Icon.money, label: 'Финансы' },
     { to: '/profile', icon: Icon.user, label: 'Профиль' },
   ]
   return (
