@@ -6,7 +6,7 @@ import { auth } from './auth'
 import { memories } from './memories'
 import { receipts } from './receipts'
 import { bingo } from './bingo'
-import { resolveCurrentTrip, setCurrentTripId } from '../lib/currentTrip'
+import { getCurrentTripId, setCurrentTripId } from '../lib/currentTrip'
 import type { Trip } from '../types'
 
 export const qk = {
@@ -19,10 +19,9 @@ export const qk = {
   memories: (id: string) => ['memories', id] as const,
 }
 
-/** id текущей поездки — из localStorage, иначе первая активная (см. lib/currentTrip). */
+/** id последней открытой поездки (или '' — экран должен увести на /trips). */
 export function useCurrentTripId(): string {
-  const { data } = useTrips()
-  return resolveCurrentTrip(data ?? [])
+  return getCurrentTripId() ?? ''
 }
 
 /** Сменить текущую поездку (вызывается при входе в поездку). */
@@ -45,16 +44,6 @@ export const useActiveTrip = useCurrentTrip
 
 export const useTrips = () => useQuery({ queryKey: qk.trips, queryFn: trips.list })
 
-/** Все расходы по всем поездкам (глобальный раздел «Финансы»). */
-export function useAllExpenses() {
-  const { data } = useTrips()
-  const list = (data ?? []).map((t) => ({ id: t.id, title: t.title }))
-  return useQuery({
-    queryKey: ['all-expenses', list.map((t) => t.id)],
-    queryFn: () => expenses.all(list),
-    enabled: list.length > 0,
-  })
-}
 export const useTrip = (id: string) =>
   useQuery({ queryKey: qk.trip(id), queryFn: () => trips.get(id), enabled: !!id })
 export const useBalance = (id: string) =>

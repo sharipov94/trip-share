@@ -5,19 +5,16 @@ import { tg } from './lib/tg'
 import { useAuth } from './auth-context'
 import { trips } from './api/trips'
 import Onboarding from './screens/Onboarding'
-import Home from './screens/Home'
 import Trips from './screens/Trips'
-import Finance from './screens/Finance'
 import TripShell from './screens/trip/TripShell'
+import Overview from './screens/trip/Overview'
 import Plan from './screens/trip/Plan'
 import TripExpenses from './screens/trip/TripExpenses'
 import TripPhotos from './screens/trip/TripPhotos'
 import Members from './screens/trip/Members'
-import Summary from './screens/trip/Summary'
 import TripNew from './screens/TripNew'
 import TripEdit from './screens/TripEdit'
 import Invite from './screens/Invite'
-import Splash from './screens/Splash'
 import Balance from './screens/Balance'
 import ExpenseNew from './screens/ExpenseNew'
 import ExpenseDetails from './screens/ExpenseDetails'
@@ -35,7 +32,7 @@ import ProfileEdit from './screens/ProfileEdit'
 import NotificationSettings from './screens/NotificationSettings'
 import HealthSettings from './screens/HealthSettings'
 
-const ROOT = ['/', '/trips', '/finance', '/profile']
+const ROOT = ['/trips', '/profile']
 
 /** Управляет нативной кнопкой «Назад» Telegram в зависимости от роута. */
 function TelegramChrome() {
@@ -87,20 +84,18 @@ export default function App() {
         <StartParamJoin />
         {!onboarded && <Onboarding onDone={finishOnboarding} />}
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/splash" element={<Splash />} />
+          <Route path="/" element={<Navigate to="/trips" replace />} />
 
           <Route path="/trips" element={<Trips />} />
-          <Route path="/finance" element={<Finance />} />
           <Route path="/trip/new" element={<TripNew />} />
           <Route path="/trip/:id/edit" element={<TripEdit />} />
+          <Route path="/trip/:id/members" element={<Members />} />
           <Route path="/trip/:id" element={<TripShell />}>
-            <Route index element={<Navigate to="plan" replace />} />
-            <Route path="plan" element={<Plan />} />
+            <Route index element={<Navigate to="overview" replace />} />
+            <Route path="overview" element={<Overview />} />
             <Route path="expenses" element={<TripExpenses />} />
+            <Route path="activities" element={<Plan />} />
             <Route path="photos" element={<TripPhotos />} />
-            <Route path="members" element={<Members />} />
-            <Route path="summary" element={<Summary />} />
           </Route>
           <Route path="/invite" element={<Invite />} />
 

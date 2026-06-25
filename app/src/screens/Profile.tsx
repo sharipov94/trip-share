@@ -50,6 +50,7 @@ export default function Profile() {
       {/* settings rows */}
       <div className="sec"><h2>Настройки</h2><div className="line" /></div>
       {[
+        { t: 'Мой Wrapped', to: '/wrapped/me' },
         { t: 'Реквизиты и профиль', to: '/profile/edit' },
         { t: 'Уведомления', to: '/profile/notifications' },
         { t: 'Здоровье (Apple Health / Google Fit)', to: '/profile/health' },
