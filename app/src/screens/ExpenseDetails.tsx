@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { Screen, TopBar, Loading } from '../ui'
+import { Screen, TopBar, Loading } from '../components'
 import { useExpense } from '../api/queries'
 
 const AV = ['var(--accent)', 'var(--ok)', 'var(--chip-bg)', 'var(--accent)', 'var(--ok)']

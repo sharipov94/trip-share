@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Screen, Av } from '../ui'
+import { Screen, Av } from '../components'
 import { useTheme, PALETTES, type Palette } from '../theme'
 import { useUpdateTheme, useTrips } from '../api/queries'
 import { useAuth } from '../auth'

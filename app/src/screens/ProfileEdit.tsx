@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { Screen, TopBar, Av } from '../ui'
+import { Screen, TopBar, Av } from '../components'
 import { useAuth } from '../auth'
 import { useUpdateProfile } from '../api/queries'
 

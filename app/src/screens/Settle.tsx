@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Screen, TopBar } from '../ui'
+import { Screen, TopBar } from '../components'
 
 export default function Settle() {
   const nav = useNavigate()

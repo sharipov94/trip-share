@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { Screen, TopBar, Av } from '../ui'
+import { Screen, TopBar, Av } from '../components'
 import { useActiveTripId, useInvite, useTrip } from '../api/queries'
 
 export default function Invite() {

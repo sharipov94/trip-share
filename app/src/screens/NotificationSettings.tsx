@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { Screen, TopBar, Toggle } from '../ui'
+import { Screen, TopBar, Toggle } from '../components'
 
 const initial = [
   { id: 'act', label: 'Новые активности', on: true },

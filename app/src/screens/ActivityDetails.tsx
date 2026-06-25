@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
-import { Screen, TopBar, Empty, Loading, Av } from '../ui'
+import { Screen, TopBar, Empty, Loading, Av } from '../components'
 import { useActivity, useVote, useComments, useAddComment } from '../api/queries'
 import { tg } from '../tg'
 

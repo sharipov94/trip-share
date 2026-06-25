@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useRef, useState } from 'react'
-import { Screen, TopBar } from '../ui'
+import { Screen, TopBar } from '../components'
 import { useActiveTripId, useReceiptOcr } from '../api/queries'
 import { tg } from '../tg'
 

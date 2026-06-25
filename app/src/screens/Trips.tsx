@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Screen, Icon, Loading, Empty } from '../ui'
+import { Screen, Icon, Loading, Empty } from '../components'
 import { useTrips } from '../api/queries'
 
 const statusLabel = { active: '● Активна сейчас', finished: 'Завершена', planning: 'Планируется' }

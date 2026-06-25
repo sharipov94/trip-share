@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { Screen, TopBar, Loading, Empty } from '../ui'
+import { Screen, TopBar, Loading, Empty } from '../components'
 import { useActiveTripId, useBalance } from '../api/queries'
 
 export default function Balance() {

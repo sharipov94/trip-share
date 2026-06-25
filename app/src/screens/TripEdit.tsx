@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { Screen, TopBar, Loading } from '../ui'
+import { Screen, TopBar, Loading } from '../components'
 import { useTrip, useUpdateTrip } from '../api/queries'
 
 const STATUSES = [

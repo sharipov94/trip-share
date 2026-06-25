@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Screen } from '../ui'
+import { Screen } from '../components'
 import { trip } from '../mocks/data'
 
 export default function Join() {

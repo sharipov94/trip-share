@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
-import { Screen, TopBar } from '../ui'
+import { Screen, TopBar } from '../components'
 import { useActiveTripId, useActiveTrip, useActivity, useCompleteActivity, useCreateExpense } from '../api/queries'
 import { tg } from '../tg'
 

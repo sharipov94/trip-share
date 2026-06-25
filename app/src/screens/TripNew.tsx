@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { Screen, TopBar } from '../ui'
+import { Screen, TopBar } from '../components'
 import { useCreateTrip } from '../api/queries'
 
 const types = [
