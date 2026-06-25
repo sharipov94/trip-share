@@ -74,6 +74,18 @@ export function useInvite(tripId: string) {
   return useMutation({ mutationFn: () => trips.invite(tripId) })
 }
 
+export function useRecordSettlement(tripId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (body: { fromUser: string; toUser: string; amount: number }) =>
+      trips.recordSettlement(tripId, body),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: qk.balance(tripId) })
+      qc.invalidateQueries({ queryKey: qk.trips })
+    },
+  })
+}
+
 export function useUpdateTrip(tripId: string) {
   const qc = useQueryClient()
   return useMutation({

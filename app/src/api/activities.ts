@@ -4,7 +4,7 @@ import * as mock from '../mocks/data'
 
 type BActivity = {
   id: string; title: string; description: string | null
-  startTime: string | null; status: string
+  startTime: string | null; status: string; goingCount?: number
 }
 
 const hhmm = (iso: string | null) => (iso ? new Date(iso).toTimeString().slice(0, 5) : '')
@@ -20,7 +20,7 @@ export const activities = {
     return bs.map((b) => ({
       id: b.id, title: b.title, time: hhmm(b.startTime), part: partOf(b.startTime),
       sub: b.description ?? '', status: b.status === 'confirmed' ? 'confirmed' : 'voting',
-      going: 0, night: b.startTime ? new Date(b.startTime).getHours() >= 18 : false,
+      going: b.goingCount ?? 0, night: b.startTime ? new Date(b.startTime).getHours() >= 18 : false,
     }))
   },
   async vote(activityId: string, vote: 'going' | 'not_going') {

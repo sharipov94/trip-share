@@ -1,5 +1,6 @@
 import { api, MOCK } from './client'
 import { wait, namesFor } from './_internal'
+import { currencySymbol } from '../lib/currency'
 import * as mock from '../mocks/data'
 
 type BExpense = {
@@ -18,7 +19,7 @@ export const expenses = {
     const names = await namesFor(tripId)
     return bs.map((b) => ({
       id: b.id, title: b.title ?? 'Расход', cat: b.category ?? 'Другое',
-      payer: names[b.payerId] ?? 'Участник', amount: Number(b.amount), cur: '€',
+      payer: names[b.payerId] ?? 'Участник', amount: Number(b.amount), cur: currencySymbol(b.currency),
     }))
   },
   async create(tripId: string, body: { amount: number; currency: string; category?: string; title?: string }) {
@@ -40,15 +41,11 @@ export const expenses = {
     const names = await namesFor(e.tripId)
     return {
       id: e.id, title: e.title ?? 'Расход', cat: e.category ?? 'Другое',
-      payer: names[e.payerId] ?? 'Участник', amount: Number(e.amount), cur: '€', tripId: e.tripId,
+      payer: names[e.payerId] ?? 'Участник', amount: Number(e.amount), cur: currencySymbol(e.currency), tripId: e.tripId,
       participants: e.participants.map((p) => ({
         name: names[p.userId] ?? 'Участник', initial: (names[p.userId] ?? '?')[0],
         amount: Number(p.amount), isPayer: p.userId === e.payerId,
       })),
     }
-  },
-  async settle(expenseId: string) {
-    if (MOCK) return wait({ ok: true })
-    return api(`/expenses/${expenseId}/settle`, { method: 'POST' })
   },
 }

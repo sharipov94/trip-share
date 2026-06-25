@@ -14,6 +14,7 @@ interface WebApp {
   contentSafeAreaInset?: Inset
   ready(): void
   expand(): void
+  openTelegramLink?(url: string): void
   onEvent?(e: string, cb: () => void): void
   BackButton: { show(): void; hide(): void; onClick(cb: () => void): void; offClick(cb: () => void): void }
   HapticFeedback?: { impactOccurred(style: Haptic): void; notificationOccurred(t: 'error' | 'success' | 'warning'): void }
@@ -65,6 +66,15 @@ export const tg = {
     // в Telegram гарантируем клиренс под кнопки, даже если инсеты не пришли; в браузере — лёгкий отступ
     const v = wa?.initData ? Math.max(top, 96) : Math.max(top, 14)
     document.documentElement.style.setProperty('--tg-top', v + 'px')
+  },
+  /** Открыть t.me-ссылку внутри Telegram (или новой вкладкой в браузере). */
+  openTelegramLink(url: string) {
+    try {
+      if (wa?.openTelegramLink) wa.openTelegramLink(url)
+      else window.open(url, '_blank')
+    } catch {
+      /* noop */
+    }
   },
   haptic(style: Haptic = 'light') {
     try {

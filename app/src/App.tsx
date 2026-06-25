@@ -11,7 +11,6 @@ import TripDetails from './screens/TripDetails'
 import TripNew from './screens/TripNew'
 import TripEdit from './screens/TripEdit'
 import Invite from './screens/Invite'
-import Join from './screens/Join'
 import Splash from './screens/Splash'
 import Balance from './screens/Balance'
 import ExpenseNew from './screens/ExpenseNew'
@@ -22,9 +21,7 @@ import ActivityDetails from './screens/ActivityDetails'
 import ActivityNew from './screens/ActivityNew'
 import ActivityEdit from './screens/ActivityEdit'
 import ActivityComplete from './screens/ActivityComplete'
-import Moment from './screens/Moment'
 import PhotoUpload from './screens/PhotoUpload'
-import PhotoPrompt from './screens/PhotoPrompt'
 import Bingo from './screens/Bingo'
 import Wrapped from './screens/Wrapped'
 import Profile from './screens/Profile'
@@ -86,7 +83,6 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/splash" element={<Splash />} />
-          <Route path="/join" element={<Join />} />
 
           <Route path="/trips" element={<Trips />} />
           <Route path="/trip/new" element={<TripNew />} />
@@ -107,9 +103,7 @@ export default function App() {
           <Route path="/activity/:id" element={<ActivityDetails />} />
 
           <Route path="/memories" element={<TripDetails initialTab="memories" showTabs={false} />} />
-          <Route path="/moment" element={<Moment />} />
           <Route path="/upload" element={<PhotoUpload />} />
-          <Route path="/prompt" element={<PhotoPrompt />} />
           <Route path="/bingo" element={<Bingo />} />
 
           <Route path="/wrapped" element={<Wrapped />} />

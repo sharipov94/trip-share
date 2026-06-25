@@ -8,8 +8,6 @@ export type Trip = {
   endDate?: string | null
   status: 'active' | 'finished' | 'planning'
   cls: string
-  day: number
-  totalDays: number
-  stats: { km: number; photos: number }
+  currency: string
   members: { id: string; name: string; initial: string; avatarUrl?: string | null }[]
 }
