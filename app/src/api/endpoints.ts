@@ -1,8 +1,8 @@
 // Типизированные функции данных. В MOCK-режиме возвращают заглушки из ../data,
 // в реальном — ходят в бэкенд и маппят его ответы во frontend-формы (drop-in).
 import { api, apiUpload, MOCK, tokens, session } from './client'
-import * as mock from '../data'
-import type { Trip } from '../data'
+import * as mock from '../mocks/data'
+import type { Trip } from '../types'
 
 const wait = <T,>(v: T) => new Promise<T>((r) => setTimeout(() => r(v), 120))
 

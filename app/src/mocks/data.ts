@@ -1,18 +1,5 @@
-// Мок-данные прототипа. В реале — из API (см. ../docs/02-backend-spec.md).
-
-export type Trip = {
-  id: string
-  title: string
-  dates: string
-  startDate?: string | null
-  endDate?: string | null
-  status: 'active' | 'finished' | 'planning'
-  cls: string
-  day: number
-  totalDays: number
-  stats: { km: number; photos: number }
-  members: { id: string; name: string; initial: string; avatarUrl?: string | null }[]
-}
+// Мок-данные прототипа. В реале — из API (см. ../../docs/02-backend-spec.md).
+import type { Trip } from '../types'
 
 const M = (...names: string[]) =>
   names.map((name, i) => ({ id: 'u' + i, name, initial: name[0] }))

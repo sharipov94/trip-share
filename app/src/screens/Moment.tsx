@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Screen, TopBar } from '../ui'
-import { moment } from '../data'
+import { moment } from '../mocks/data'
 
 export default function Moment() {
   const nav = useNavigate()
