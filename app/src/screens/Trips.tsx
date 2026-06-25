@@ -13,8 +13,8 @@ const statusLabel: Record<Trip['status'], string> = {
 // порядок вкладок тулбара: активные → будущие → прошедшие
 const TABS: { status: Trip['status']; title: string }[] = [
   { status: 'active', title: 'Активные' },
-  { status: 'planning', title: 'Планируются' },
-  { status: 'finished', title: 'Завершённые' },
+  { status: 'planning', title: 'Будущие' },
+  { status: 'finished', title: 'Архив' },
 ]
 
 export default function Trips() {
