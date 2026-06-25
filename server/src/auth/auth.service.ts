@@ -15,7 +15,9 @@ export class AuthService {
   ) {}
 
   async loginWithTelegram(initData: string) {
-    const botToken = this.cfg.get<string>('BOT_TOKEN') ?? ''
+    const botToken = this.cfg.get<string>('BOT_TOKEN')
+    // Fail closed: без токена HMAC выводится из пустого секрета и initData можно подделать.
+    if (!botToken) throw new UnauthorizedException('BOT_TOKEN не настроен')
     const ttl = Number(this.cfg.get('INITDATA_TTL') ?? 86400)
     let tg
     try {
@@ -56,9 +58,10 @@ export class AuthService {
     return saveImage({ buffer: buf, mimetype: 'image/jpeg', originalname: 'avatar.jpg' } as any)
   }
 
-  /** Dev-вход без Telegram — только если DEV_FAKE_AUTH=true. */
+  /** Dev-вход без Telegram — только вне production и при DEV_FAKE_AUTH=true. */
   async devLogin(telegramId = '1000001', firstName = 'Dev User') {
-    if (this.cfg.get('DEV_FAKE_AUTH') !== 'true') {
+    // Двойной гейт: даже если флаг случайно включён в проде — вход остаётся закрыт.
+    if (process.env.NODE_ENV === 'production' || this.cfg.get('DEV_FAKE_AUTH') !== 'true') {
       throw new ForbiddenException('Dev-вход выключен')
     }
     const user = await this.users.upsertFromTelegram({
@@ -71,7 +74,10 @@ export class AuthService {
   refresh(token: string) {
     let payload: any
     try {
-      payload = this.jwt.verify(token, { secret: this.cfg.get('JWT_SECRET') })
+      payload = this.jwt.verify(token, {
+        secret: this.cfg.get('JWT_SECRET'),
+        algorithms: ['HS256'],
+      })
     } catch {
       throw new UnauthorizedException('Невалидный refresh-токен')
     }

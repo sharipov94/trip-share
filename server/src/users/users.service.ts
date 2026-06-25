@@ -49,10 +49,18 @@ export class UsersService {
     return { ...user, paymentDetails: decrypt(user.paymentDetails) }
   }
 
-  /** Публичный профиль — реквизиты НЕ отдаём (см. docs/09-security.md §3). */
-  async publicView(id: string): Promise<Omit<User, 'paymentDetails'>> {
+  /**
+   * Публичный профиль — явный allowlist полей (см. docs/09-security.md §3).
+   * Не «всё кроме paymentDetails»: так telegramId и любые будущие чувствительные
+   * колонки не утекут случайно произвольному аутентифицированному пользователю.
+   */
+  async publicView(id: string): Promise<Pick<User, 'id' | 'firstName' | 'username' | 'avatarUrl'>> {
     const user = await this.getByIdOrFail(id)
-    const { paymentDetails: _omit, ...pub } = user
-    return pub
+    return {
+      id: user.id,
+      firstName: user.firstName,
+      username: user.username,
+      avatarUrl: user.avatarUrl,
+    }
   }
 }

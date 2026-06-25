@@ -17,6 +17,7 @@ export function validateInitData(
   botToken: string,
   ttlSeconds: number,
 ): TelegramUser {
+  if (!botToken) throw new Error('initData: BOT_TOKEN не настроен')
   const params = new URLSearchParams(initData)
   const hash = params.get('hash')
   if (!hash) throw new Error('initData: hash отсутствует')

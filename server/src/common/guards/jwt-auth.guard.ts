@@ -21,12 +21,18 @@ export class JwtAuthGuard implements CanActivate {
     const auth: string | undefined = req.headers['authorization']
     if (!auth?.startsWith('Bearer ')) throw new UnauthorizedException('Нет токена')
 
+    let payload: { sub: string; tg: string; typ?: string }
     try {
-      const payload = this.jwt.verify(auth.slice(7), { secret: process.env.JWT_SECRET })
-      req.user = { id: payload.sub, telegramId: payload.tg }
-      return true
+      payload = this.jwt.verify(auth.slice(7), {
+        secret: process.env.JWT_SECRET,
+        algorithms: ['HS256'],
+      })
     } catch {
       throw new UnauthorizedException('Невалидный токен')
     }
+    // refresh-токен (долгоживущий) не должен приниматься как access для API
+    if (payload.typ === 'refresh') throw new UnauthorizedException('Refresh-токен не годен как access')
+    req.user = { id: payload.sub, telegramId: payload.tg }
+    return true
   }
 }
