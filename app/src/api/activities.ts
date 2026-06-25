@@ -1,6 +1,7 @@
 import { api, MOCK } from './client'
 import { wait, usersFor } from './_internal'
 import * as mock from '../mocks/data'
+import type { ActivityItem } from '../types'
 
 type BActivity = {
   id: string; title: string; description: string | null
@@ -14,12 +15,13 @@ const partOf = (iso: string | null) => {
 }
 
 export const activities = {
-  async list(tripId: string): Promise<typeof mock.activities> {
+  async list(tripId: string): Promise<ActivityItem[]> {
     if (MOCK) return wait(mock.activities)
     const bs = await api<BActivity[]>(`/trips/${tripId}/activities`)
     return bs.map((b) => ({
       id: b.id, title: b.title, time: hhmm(b.startTime), part: partOf(b.startTime),
-      sub: b.description ?? '', status: b.status === 'confirmed' ? 'confirmed' : 'voting',
+      sub: b.description ?? '',
+      status: b.status === 'completed' ? 'completed' : b.status === 'confirmed' ? 'confirmed' : 'voting',
       going: b.goingCount ?? 0, night: b.startTime ? new Date(b.startTime).getHours() >= 18 : false,
     }))
   },

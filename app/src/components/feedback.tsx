@@ -1,3 +1,25 @@
+import { useEffect } from 'react'
+
+/* всплывающее уведомление, само исчезает */
+export function Toast({ text, onDone, ms = 2400 }: { text: string; onDone: () => void; ms?: number }) {
+  useEffect(() => {
+    const t = setTimeout(onDone, ms)
+    return () => clearTimeout(t)
+  }, [onDone, ms])
+  return (
+    <div
+      style={{
+        position: 'fixed', left: '50%', bottom: 'calc(env(safe-area-inset-bottom, 0px) + 88px)',
+        transform: 'translateX(-50%)', zIndex: 50, maxWidth: '86%',
+        background: 'var(--ink)', color: 'var(--bg)', padding: '12px 18px', borderRadius: 14,
+        fontSize: 13.5, fontWeight: 700, boxShadow: '0 8px 28px rgba(0,0,0,.28)', textAlign: 'center',
+      }}
+    >
+      {text}
+    </div>
+  )
+}
+
 /* состояние загрузки / пусто */
 export function Loading() {
   return <div className="sub" style={{ textAlign: 'center', padding: '40px 0' }}>Загрузка…</div>

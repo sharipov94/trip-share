@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from '@nestjs/common'
 import { TripsService } from './trips.service'
 import { CurrentUser, AuthUser } from '../common/decorators/current-user.decorator'
 import { CreateTripDto } from './dto/create-trip.dto'
@@ -34,6 +34,7 @@ export class TripsController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   remove(@CurrentUser() u: AuthUser, @Param('id') id: string) {
     return this.trips.remove(u.id, id)
   }

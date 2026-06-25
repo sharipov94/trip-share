@@ -35,19 +35,35 @@ export class TripsService {
     return trip
   }
 
+  /**
+   * Статус, выведенный из дат: до начала — planning, между — active, после
+   * конца — finished. Если даты не заданы — оставляем сохранённый статус
+   * (его можно выставить вручную). Считается на чтение, в БД не пишется.
+   */
+  private withDerivedStatus(trip: Trip): Trip {
+    if (!trip.startDate && !trip.endDate) return trip
+    const today = new Date().toISOString().slice(0, 10)
+    let status: Trip['status']
+    if (trip.endDate && today > trip.endDate) status = 'finished'
+    else if (trip.startDate && today < trip.startDate) status = 'planning'
+    else status = 'active'
+    return { ...trip, status }
+  }
+
   /** Поездки, где пользователь — участник. */
   async listForUser(userId: string): Promise<Trip[]> {
     const memberships = await this.members.find({ where: { userId } })
     const ids = memberships.map((m) => m.tripId)
     if (!ids.length) return []
-    return this.trips.find({ where: { id: In(ids) }, order: { createdAt: 'DESC' } })
+    const trips = await this.trips.find({ where: { id: In(ids) }, order: { createdAt: 'DESC' } })
+    return trips.map((t) => this.withDerivedStatus(t))
   }
 
   async getOne(userId: string, tripId: string): Promise<Trip> {
     await this.membership.assertMember(userId, tripId)
     const trip = await this.trips.findOne({ where: { id: tripId } })
     if (!trip) throw new NotFoundException('Поездка не найдена')
-    return trip
+    return this.withDerivedStatus(trip)
   }
 
   async update(userId: string, tripId: string, dto: UpdateTripDto): Promise<Trip> {

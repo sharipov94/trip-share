@@ -11,3 +11,15 @@ export type Trip = {
   currency: string
   members: { id: string; name: string; initial: string; avatarUrl?: string | null }[]
 }
+
+// View-модель строки активности (списки на Home и в TripDetails).
+export type ActivityItem = {
+  id: string
+  title: string
+  time: string
+  part: string
+  sub: string
+  status: 'voting' | 'confirmed' | 'completed'
+  going: number
+  night: boolean
+}
