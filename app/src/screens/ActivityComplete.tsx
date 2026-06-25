@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { Screen, TopBar } from '../components'
 import { useActiveTripId, useActiveTrip, useActivity, useCompleteActivity, useCreateExpense } from '../api/queries'
-import { tg } from '../tg'
+import { tg } from '../lib/tg'
 
 export default function ActivityComplete() {
   const nav = useNavigate()

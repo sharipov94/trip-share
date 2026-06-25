@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { Screen, Av } from '../components'
 import { useTheme, PALETTES, type Palette } from '../theme'
 import { useUpdateTheme, useTrips } from '../api/queries'
-import { useAuth } from '../auth'
-import { tg } from '../tg'
+import { useAuth } from '../auth-context'
+import { tg } from '../lib/tg'
 
 export default function Profile() {
   const { palette, setPalette } = useTheme()

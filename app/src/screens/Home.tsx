@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Screen, Empty, Loading, Av } from '../components'
 import { useState } from 'react'
-import { useAuth } from '../auth'
+import { useAuth } from '../auth-context'
 import { useActiveTripId, useTrip, useActivities, useExpenses, useBalance } from '../api/queries'
 
 export default function Home() {

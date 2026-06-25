@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import type { ReactNode } from 'react'
-import { tg } from '../tg'
+import { tg } from '../lib/tg'
 import { Icon } from './icons'
 import { BottomNav } from './nav'
 

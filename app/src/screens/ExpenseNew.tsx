@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Screen, TopBar } from '../components'
 import { categories } from '../mocks/data'
 import { useActiveTrip, useActiveTripId, useCreateExpense } from '../api/queries'
-import { tg } from '../tg'
+import { tg } from '../lib/tg'
 
 const splits = [
   { id: 'equal', label: 'Поровну' },
