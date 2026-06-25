@@ -78,6 +78,10 @@ export const trips = {
     if (MOCK) return wait({ token: 'devtoken', deepLink: 'https://t.me/Share_trip_bot?startapp=devtoken' })
     return api<{ token: string; deepLink: string }>(`/trips/${id}/invite`, { method: 'POST' })
   },
+  async remove(id: string) {
+    if (MOCK) return wait({ ok: true })
+    return api(`/trips/${id}`, { method: 'DELETE' })
+  },
   async join(token: string): Promise<{ id: string }> {
     if (MOCK) return wait({ id: mock.trip.id })
     const b = await api<BTrip>('/trips/join', { method: 'POST', body: { token } })

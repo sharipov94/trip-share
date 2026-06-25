@@ -1,5 +1,5 @@
 // Мок-данные прототипа. В реале — из API (см. ../../docs/02-backend-spec.md).
-import type { Trip } from '../types'
+import type { Trip, ActivityItem } from '../types'
 
 const M = (...names: string[]) =>
   names.map((name, i) => ({ id: 'u' + i, name, initial: name[0] }))
@@ -28,7 +28,7 @@ export const getTrip = (id?: string): Trip =>
 // Активная поездка — для Home и др.
 export const trip = tripList[0]
 
-export const activities = [
+export const activities: ActivityItem[] = [
   {
     id: 'a1', title: 'Музей Пикассо', time: '14:00', part: 'ДЕНЬ',
     sub: 'Carrer de Montcada, 15–23', status: 'confirmed', going: 4, night: false,

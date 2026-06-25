@@ -56,8 +56,13 @@ export function useAddComment(activityId: string) {
 }
 
 export function useVote(activityId: string) {
+  const qc = useQueryClient()
   return useMutation({
     mutationFn: (vote: 'going' | 'not_going') => activities.vote(activityId, vote),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['activity', activityId] })
+      qc.invalidateQueries({ queryKey: ['activities'] })
+    },
   })
 }
 
@@ -72,6 +77,14 @@ export function useCreateTrip() {
 
 export function useInvite(tripId: string) {
   return useMutation({ mutationFn: () => trips.invite(tripId) })
+}
+
+export function useDeleteTrip() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (tripId: string) => trips.remove(tripId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: qk.trips }),
+  })
 }
 
 export function useRecordSettlement(tripId: string) {
@@ -108,7 +121,14 @@ export function useCreateActivity(tripId: string) {
 }
 
 export function useCompleteActivity() {
-  return useMutation({ mutationFn: (activityId: string) => activities.complete(activityId) })
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (activityId: string) => activities.complete(activityId),
+    onSuccess: (_d, activityId) => {
+      qc.invalidateQueries({ queryKey: ['activity', activityId] })
+      qc.invalidateQueries({ queryKey: ['activities'] })
+    },
+  })
 }
 
 export function useUpdateActivity(activityId: string) {

@@ -83,7 +83,7 @@ export default function TripDetails({
               <div className="body">
                 <div className="ttl">{a.title}</div>
                 <div className="sub">{a.sub}</div>
-                <span className="badge ok">{a.status === 'confirmed' ? `Подтверждена · идут ${a.going}` : `Голосование · ${a.going} за`}</span>
+                <span className="badge ok">{a.status === 'completed' ? `Завершена ✓ · ${a.going} ходили` : a.status === 'confirmed' ? `Подтверждена · идут ${a.going}` : `Голосование · ${a.going} за`}</span>
               </div>
             </div>
           ))}

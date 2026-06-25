@@ -1,7 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Screen, TopBar, Loading } from '../components'
-import { useTrip, useUpdateTrip } from '../api/queries'
+import { useTrip, useUpdateTrip, useDeleteTrip } from '../api/queries'
+import { tg } from '../lib/tg'
 
 const STATUSES = [
   { id: 'planning', label: 'Планируется' },
@@ -14,11 +15,13 @@ export default function TripEdit() {
   const { id } = useParams()
   const { data: trip, isLoading } = useTrip(id ?? '')
   const update = useUpdateTrip(id ?? '')
+  const del = useDeleteTrip()
 
   const [title, setTitle] = useState('')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
   const [status, setStatus] = useState('planning')
+  const [confirmDel, setConfirmDel] = useState(false)
 
   useEffect(() => {
     if (!trip) return
@@ -33,6 +36,12 @@ export default function TripEdit() {
       { title: title.trim() || undefined, startDate: start || undefined, endDate: end || undefined, status },
       { onSettled: () => nav(-1) },
     )
+  }
+
+  const remove = () => {
+    if (!id) return
+    tg.haptic('medium')
+    del.mutate(id, { onSuccess: () => nav('/trips') })
   }
 
   return (
@@ -57,6 +66,23 @@ export default function TripEdit() {
           <button className="btn-grad" style={{ marginTop: 8 }} disabled={update.isPending} onClick={save}>
             {update.isPending ? 'Сохраняем…' : 'Сохранить'}
           </button>
+
+          <div className="sec" style={{ marginTop: 28 }}><h2>Опасная зона</h2><div className="line" /></div>
+          {!confirmDel ? (
+            <button className="btn-ghost" style={{ width: '100%', color: 'var(--danger, #e5484d)' }} onClick={() => setConfirmDel(true)}>
+              Удалить поездку
+            </button>
+          ) : (
+            <>
+              <p className="sub" style={{ textAlign: 'center', margin: '0 4px 10px' }}>Удалить «{trip.title}» со всеми активностями и расходами? Это необратимо.</p>
+              <div style={{ display: 'flex', gap: 9 }}>
+                <button className="btn-ghost" style={{ flex: 1 }} disabled={del.isPending} onClick={() => setConfirmDel(false)}>Отмена</button>
+                <button className="btn-solid" style={{ flex: 1, background: 'var(--danger, #e5484d)', color: '#fff' }} disabled={del.isPending} onClick={remove}>
+                  {del.isPending ? 'Удаляем…' : 'Да, удалить'}
+                </button>
+              </div>
+            </>
+          )}
         </>
       )}
     </Screen>

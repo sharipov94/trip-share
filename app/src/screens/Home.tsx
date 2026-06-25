@@ -2,12 +2,46 @@ import { useNavigate } from 'react-router-dom'
 import { Screen, Empty, Loading, Av } from '../components'
 import { useState } from 'react'
 import { useAuth } from '../auth-context'
-import { useActiveTripId, useTrip, useActivities, useExpenses, useBalance } from '../api/queries'
+import { useActiveTripId, useTrip, useActivities, useExpenses, useBalance, useVote } from '../api/queries'
+import { tg } from '../lib/tg'
+
+type ActivityRow = NonNullable<ReturnType<typeof useActivities>['data']>[number]
+
+/** Строка активности на главной с рабочими кнопками «Иду / Не иду». */
+function HomeActivity({ a, onOpen }: { a: ActivityRow; onOpen: () => void }) {
+  const [vote, setVote] = useState<'go' | 'no' | null>(null)
+  const voteMut = useVote(a.id)
+  const cast = (e: React.MouseEvent, v: 'go' | 'no') => {
+    e.stopPropagation()
+    tg.haptic('light')
+    setVote(v)
+    voteMut.mutate(v === 'go' ? 'going' : 'not_going')
+  }
+  return (
+    <div className={'act' + (a.night ? ' night' : '')} style={{ cursor: 'pointer' }} onClick={onOpen}>
+      <div className="bar" />
+      <div className="time"><b>{a.time || '—'}</b><s>{a.part}</s></div>
+      <div className="body">
+        <div className="ttl">{a.title}</div>
+        <div className="sub">{a.sub}</div>
+        {a.status === 'completed' ? (
+          <span className="badge ok">Завершена ✓</span>
+        ) : a.status === 'confirmed' ? (
+          <span className="badge ok">Подтверждена</span>
+        ) : (
+          <div className="vote">
+            <button className={'go' + (vote === 'go' ? ' sel' : '')} disabled={voteMut.isPending} onClick={(e) => cast(e, 'go')}>Иду</button>
+            <button className={'no' + (vote === 'no' ? ' sel' : '')} disabled={voteMut.isPending} onClick={(e) => cast(e, 'no')}>Не иду</button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 export default function Home() {
   const nav = useNavigate()
   const { user } = useAuth()
-  const [vote, setVote] = useState<'go' | 'no' | null>(null)
 
   const tripId = useActiveTripId()
   const { data: trip, isLoading } = useTrip(tripId)
@@ -63,22 +97,7 @@ export default function Home() {
           <div className="sec"><h2>Активности</h2><div className="line" /><span className="cnt">{today.length}</span></div>
           {today.length === 0 && <Empty text="Активностей пока нет" />}
           {today.map((a) => (
-            <div key={a.id} className={'act' + (a.night ? ' night' : '')} style={{ cursor: 'pointer' }} onClick={() => nav('/activity/' + a.id)}>
-              <div className="bar" />
-              <div className="time"><b>{a.time || '—'}</b><s>{a.part}</s></div>
-              <div className="body">
-                <div className="ttl">{a.title}</div>
-                <div className="sub">{a.sub}</div>
-                {a.status === 'confirmed' ? (
-                  <span className="badge ok">Подтверждена</span>
-                ) : (
-                  <div className="vote">
-                    <button className={'go' + (vote === 'go' ? ' sel' : '')} onClick={(e) => { e.stopPropagation(); setVote('go') }}>Иду</button>
-                    <button className={'no' + (vote === 'no' ? ' sel' : '')} onClick={(e) => { e.stopPropagation(); setVote('no') }}>Не иду</button>
-                  </div>
-                )}
-              </div>
-            </div>
+            <HomeActivity key={a.id} a={a} onOpen={() => nav('/activity/' + a.id)} />
           ))}
 
           {/* долги — из реального баланса */}
