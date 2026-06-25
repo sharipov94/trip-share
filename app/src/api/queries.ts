@@ -1,5 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { trips, activities, expenses, auth, memories, receipts, bingo } from './endpoints'
+import { trips } from './trips'
+import { activities } from './activities'
+import { expenses } from './expenses'
+import { auth } from './auth'
+import { memories } from './memories'
+import { receipts } from './receipts'
+import { bingo } from './bingo'
 
 export const qk = {
   trips: ['trips'] as const,

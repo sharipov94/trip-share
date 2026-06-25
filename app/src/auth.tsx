@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import { auth } from './api/endpoints'
+import { auth } from './api/auth'
 import { tokens, MOCK } from './api/client'
 import { tg } from './tg'
 

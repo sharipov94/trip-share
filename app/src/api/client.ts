@@ -1,7 +1,7 @@
 // Низкоуровневый клиент: хранение токенов, fetch с Bearer, авто-refresh, mock-флаг.
 const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
 
-/** Пустой VITE_API_URL → работаем на заглушках (см. endpoints.ts). */
+/** Пустой VITE_API_URL → работаем на заглушках (см. api/*.ts). */
 export const MOCK = !BASE
 
 /** Текущий пользователь (id из /auth/me) — для разметки «Ты» в балансе и т.п. */

@@ -1,6 +1,7 @@
 import { QueryClient } from '@tanstack/react-query'
 import { compressImage } from './image'
-import { memories, bingo, type BingoState } from '../api/endpoints'
+import { memories } from '../api/memories'
+import { bingo, type BingoState } from '../api/bingo'
 
 type Photo = { id: string; url: string; author: string; uploading?: boolean }
 
