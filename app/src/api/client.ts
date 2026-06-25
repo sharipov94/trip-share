@@ -80,5 +80,7 @@ async function unwrap<T>(res: Response): Promise<T> {
     throw new Error(`${res.status}: ${text || res.statusText}`)
   }
   if (res.status === 204) return undefined as T
-  return res.json() as Promise<T>
+  // пустое тело (напр. DELETE → 200/204 без контента): не парсим как JSON
+  const text = await res.text()
+  return (text ? JSON.parse(text) : undefined) as T
 }

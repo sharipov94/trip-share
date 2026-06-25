@@ -6,6 +6,7 @@ import { auth } from './auth'
 import { memories } from './memories'
 import { receipts } from './receipts'
 import { bingo } from './bingo'
+import type { Trip } from '../types'
 
 export const qk = {
   trips: ['trips'] as const,
@@ -83,7 +84,11 @@ export function useDeleteTrip() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (tripId: string) => trips.remove(tripId),
-    onSuccess: () => qc.invalidateQueries({ queryKey: qk.trips }),
+    onSuccess: (_d, tripId) => {
+      // мгновенно убираем из кэша списка, затем синхронизируем с сервером
+      qc.setQueryData<Trip[]>(qk.trips, (old) => old?.filter((t) => t.id !== tripId))
+      qc.invalidateQueries({ queryKey: qk.trips })
+    },
   })
 }
 

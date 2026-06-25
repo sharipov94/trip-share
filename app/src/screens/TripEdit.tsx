@@ -41,7 +41,7 @@ export default function TripEdit() {
   const remove = () => {
     if (!id) return
     tg.haptic('medium')
-    del.mutate(id, { onSuccess: () => nav('/trips') })
+    del.mutate(id, { onSuccess: () => nav('/trips', { replace: true, state: { toast: 'Поездка удалена' } }) })
   }
 
   return (
@@ -55,14 +55,21 @@ export default function TripEdit() {
             <div className="field" style={{ flex: 1 }}><label>Начало</label><input type="date" min={new Date().toISOString().slice(0, 10)} value={start} onChange={(e) => setStart(e.target.value)} /></div>
             <div className="field" style={{ flex: 1 }}><label>Конец</label><input type="date" min={start || new Date().toISOString().slice(0, 10)} value={end} onChange={(e) => setEnd(e.target.value)} /></div>
           </div>
-          <div className="field">
-            <label>Статус</label>
-            <div className="seg">
-              {STATUSES.map((s) => (
-                <button key={s.id} className={status === s.id ? 'on' : ''} onClick={() => setStatus(s.id)}>{s.label}</button>
-              ))}
+          {start || end ? (
+            <div className="field">
+              <label>Статус</label>
+              <p className="sub" style={{ margin: '2px 4px 0' }}>Определяется автоматически по датам: до начала — «Планируется», во время — «Активна», после конца — «Завершена».</p>
             </div>
-          </div>
+          ) : (
+            <div className="field">
+              <label>Статус</label>
+              <div className="seg">
+                {STATUSES.map((s) => (
+                  <button key={s.id} className={status === s.id ? 'on' : ''} onClick={() => setStatus(s.id)}>{s.label}</button>
+                ))}
+              </div>
+            </div>
+          )}
           <button className="btn-grad" style={{ marginTop: 8 }} disabled={update.isPending} onClick={save}>
             {update.isPending ? 'Сохраняем…' : 'Сохранить'}
           </button>
