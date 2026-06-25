@@ -30,11 +30,11 @@ export function CreateFab() {
           </div>
         </div>
       )}
-      <button
-        aria-label="Создать"
-        onClick={() => { tg.haptic('light'); setOpen(true) }}
-        style={{ position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: 'calc(env(safe-area-inset-bottom,0px) + 64px)', zIndex: 55, width: 56, height: 56, borderRadius: '50%', border: 'none', background: 'var(--g1)', color: 'var(--on-grad)', fontSize: 30, lineHeight: '56px', boxShadow: '0 10px 26px rgba(0,0,0,.3)', cursor: 'pointer' }}
-      >+</button>
+      <button className="fab" aria-label="Создать" onClick={() => { tg.haptic('light'); setOpen(true) }}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="url(#ng)" strokeWidth="2.8" strokeLinecap="round">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </button>
     </>
   )
 }
