@@ -33,15 +33,22 @@ npm run dev
 
 ## Структура
 
+Слоистая (layer-based). Полная карта — в
+[`../docs/11-code-architecture.md`](../docs/11-code-architecture.md).
+
 ```
 src/
-├ theme.tsx        — провайдер палитры + переключатель
-├ data.ts          — мок-данные (поездка, активности, расходы, баланс…)
-├ ui.tsx           — общие компоненты (BottomNav, иконки, примитивы, рамка)
-├ index.css        — токены 4 палитр + классы компонентов (+ Tailwind)
-├ App.tsx          — роутинг и каркас
-└ screens/         — экраны
+├ api/         слой данных: client (fetch+MOCK), queries (хуки), домены
+├ components/  UI-кит (icons, nav, bars, avatar, feedback) + барель index.ts
+├ lib/         утилиты без UI (tg, image, uploads)
+├ theme/       провайдер палитры + 4 палитры
+├ types/       кросс-доменные типы (Trip)
+├ mocks/       мок-данные для MOCK-режима
+├ screens/     ~30 экранов
+├ auth.tsx     AuthProvider; auth-context.ts — хук useAuth
+├ App.tsx      роуты
+└ main.tsx     точка входа (провайдеры)
 ```
 
-> Данные — заглушки. Подключение к бэкенду (см. `../docs/02-backend-spec.md`) —
-> следующий шаг.
+> Подключение к бэкенду: задай `VITE_API_URL` в `.env` (пусто → MOCK-режим на
+> заглушках). Пошагово — в [`../docs/13-getting-started.md`](../docs/13-getting-started.md).

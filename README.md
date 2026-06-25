@@ -28,16 +28,35 @@
 | [TG_MINIAPP_ARCHITECTURE.md](TG_MINIAPP_ARCHITECTURE.md) | Высокоуровневые потоки данных |
 | [schema.sql](schema.sql) | Исполняемый DDL (PostgreSQL) |
 
+**Документация по коду** (как он реализован):
+
+| Документ | Содержание |
+|----------|------------|
+| [docs/11-code-architecture.md](docs/11-code-architecture.md) | Фактическая структура `app/` и `server/`, npm-скрипты, переменные окружения |
+| [docs/12-development.md](docs/12-development.md) | How-to: MOCK/реальный backend, dev-вход, тесты/lint, добавление API-домена |
+| [docs/13-getting-started.md](docs/13-getting-started.md) | Tutorial: запуск полного стека с нуля |
+
 ## Технологический стек
 
 **Backend:** Node.js · NestJS · PostgreSQL · Redis · BullMQ · S3 · Docker
 **Frontend:** React · TypeScript · Telegram SDK · TanStack Query · Zustand · Tailwind
 
+## Быстрый старт
+
+```bash
+cd app && npm install && npm run dev   # фронт на заглушках, без бэкенда
+```
+
+Открой `http://localhost:5173`. Полный стек (с API и базой) — в
+[docs/13-getting-started.md](docs/13-getting-started.md).
+
 ## Статус
 
-Стадия проектирования. Кода ещё нет. Весь продукт строится как Telegram Mini App
-(v1); отдельное мобильное приложение — v2, после запуска Mini App. Рекомендуемый
-порядок реализации — см. раздел «Дальнейшие шаги» в
+Работающий MVP-прототип. Реализованы оба пакета: фронт (`app/`, ~30 экранов,
+MOCK-режим + интеграция с API) и бэкенд (`server/`, NestJS: auth, trips, expenses
+с минимизацией переводов, activities, memories, bingo, receipts-OCR). Продукт —
+Telegram Mini App (v1); отдельное мобильное приложение — v2. Рекомендуемый порядок
+дальнейшей реализации — см. «Дальнейшие шаги» в
 [docs/01-product-concept.md](docs/01-product-concept.md).
 
 ---
