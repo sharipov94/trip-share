@@ -35,6 +35,7 @@
 | [docs/11-code-architecture.md](docs/11-code-architecture.md) | Фактическая структура `app/` и `server/`, npm-скрипты, переменные окружения |
 | [docs/12-development.md](docs/12-development.md) | How-to: MOCK/реальный backend, dev-вход, тесты/lint, добавление API-домена |
 | [docs/13-getting-started.md](docs/13-getting-started.md) | Tutorial: запуск полного стека с нуля |
+| [docs/14-deployment.md](docs/14-deployment.md) | Деплой в прод (trip-radar.ru): `./deploy.sh`, Caddy, откат |
 
 ## Технологический стек
 
