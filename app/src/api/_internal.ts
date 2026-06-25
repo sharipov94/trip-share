@@ -7,10 +7,10 @@ export const wait = <T,>(v: T) => new Promise<T>((r) => setTimeout(() => r(v), 1
 
 // ── backend-формы, общие для нескольких доменов ──
 export type BMember = { id: string; userId: string }
-export type BUser = { id: string; firstName: string | null; avatarUrl: string | null }
+export type BUser = { id: string; firstName: string | null; username: string | null; avatarUrl: string | null }
 
-// кэш участников поездки: id → {имя, инициал, аватар}
-type UserInfo = { name: string; initial: string; avatarUrl: string | null }
+// кэш участников поездки: id → {имя, инициал, аватар, telegram-username}
+type UserInfo = { name: string; initial: string; avatarUrl: string | null; username: string | null }
 const userCache: Record<string, Record<string, UserInfo>> = {}
 
 export async function usersFor(tripId: string): Promise<Record<string, UserInfo>> {
@@ -21,7 +21,7 @@ export async function usersFor(tripId: string): Promise<Record<string, UserInfo>
     members.map(async (m) => {
       const u = await api<BUser>(`/users/${m.userId}`).catch(() => null)
       const name = u?.firstName ?? 'Участник'
-      map[m.userId] = { name, initial: name[0] ?? '?', avatarUrl: u?.avatarUrl ?? null }
+      map[m.userId] = { name, initial: name[0] ?? '?', avatarUrl: u?.avatarUrl ?? null, username: u?.username ?? null }
     }),
   )
   userCache[tripId] = map

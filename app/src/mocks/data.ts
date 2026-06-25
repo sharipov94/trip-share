@@ -7,17 +7,17 @@ const M = (...names: string[]) =>
 export const tripList: Trip[] = [
   {
     id: 'bcn-2027', title: 'Барселона 2027', dates: '12–19 июня · 5 человек',
-    status: 'active', cls: 'g-a', day: 3, totalDays: 7, stats: { km: 94, photos: 143 },
+    status: 'active', cls: 'g-a', currency: '€',
     members: M('Никита', 'Аня', 'Макс', 'Даша', 'Лев'),
   },
   {
     id: 'alps', title: 'Альпы road trip', dates: '3–9 марта · 4 человека',
-    status: 'finished', cls: 'g-c', day: 7, totalDays: 7, stats: { km: 48, photos: 210 },
+    status: 'finished', cls: 'g-c', currency: '€',
     members: M('Никита', 'Аня', 'Лев', 'Соня'),
   },
   {
     id: 'lisboa', title: 'Лиссабон', dates: 'окт 2026 · 6 человек',
-    status: 'planning', cls: 'g-b', day: 0, totalDays: 5, stats: { km: 0, photos: 0 },
+    status: 'planning', cls: 'g-b', currency: '€',
     members: M('Никита', 'Аня', 'Макс', 'Даша', 'Лев', 'Иван'),
   },
 ]
@@ -52,9 +52,9 @@ export const expenses = [
 
 // План минимальных переводов (результат оптимизации долгов)
 export const settlements = [
-  { id: 's1', from: 'Ты', to: 'Аня', toInitial: 'А', amount: 42 },
-  { id: 's2', from: 'Макс', to: 'Никита', toInitial: 'Н', amount: 28 },
-  { id: 's3', from: 'Лев', to: 'Аня', toInitial: 'А', amount: 17 },
+  { id: 's1', fromId: 'me', toId: 'u-anya', toUsername: null as string | null, from: 'Ты', to: 'Аня', toInitial: 'А', amount: 42 },
+  { id: 's2', fromId: 'u-max', toId: 'u-nikita', toUsername: null as string | null, from: 'Макс', to: 'Никита', toInitial: 'Н', amount: 28 },
+  { id: 's3', fromId: 'u-lev', toId: 'u-anya', toUsername: null as string | null, from: 'Лев', to: 'Аня', toInitial: 'А', amount: 17 },
 ]
 
 export const moment = {

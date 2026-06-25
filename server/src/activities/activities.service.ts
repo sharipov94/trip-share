@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { In, Repository } from 'typeorm'
 import { Activity } from '../entities/activity.entity'
 import { ActivityVote, VoteValue } from '../entities/activity-vote.entity'
 import { ActivityComment } from '../entities/activity-comment.entity'
@@ -20,7 +20,15 @@ export class ActivitiesService {
 
   async list(userId: string, tripId: string) {
     await this.membership.assertMember(userId, tripId)
-    return this.activities.find({ where: { tripId }, order: { startTime: 'ASC' } })
+    const list = await this.activities.find({ where: { tripId }, order: { startTime: 'ASC' } })
+    if (!list.length) return []
+    // счётчик «идёт» по каждой активности — одним запросом
+    const votes = await this.votes.find({
+      where: { activityId: In(list.map((a) => a.id)), vote: 'going' },
+    })
+    const going: Record<string, number> = {}
+    for (const v of votes) going[v.activityId] = (going[v.activityId] ?? 0) + 1
+    return list.map((a) => ({ ...a, goingCount: going[a.id] ?? 0 }))
   }
 
   async create(userId: string, tripId: string, dto: CreateActivityDto) {

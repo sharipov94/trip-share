@@ -1,5 +1,6 @@
 import { api, MOCK, session } from './client'
-import { wait, usersFor, namesFor, type BMember } from './_internal'
+import { wait, usersFor, type BMember } from './_internal'
+import { currencySymbol } from '../lib/currency'
 import * as mock from '../mocks/data'
 import type { Trip } from '../types'
 
@@ -24,8 +25,7 @@ export const trips = {
     const bs = await api<BTrip[]>('/trips')
     return bs.map((b) => ({
       id: b.id, title: b.title, dates: dateRange(b.startDate, b.endDate),
-      status: b.status, cls: clsFor(b.id), day: b.status === 'finished' ? 1 : 0,
-      totalDays: 1, stats: { km: 0, photos: 0 }, members: [],
+      status: b.status, cls: clsFor(b.id), currency: currencySymbol(b.baseCurrency), members: [],
     }))
   },
   async get(id: string): Promise<Trip> {
@@ -36,8 +36,7 @@ export const trips = {
     return {
       id: b.id, title: b.title, dates: dateRange(b.startDate, b.endDate),
       startDate: b.startDate, endDate: b.endDate,
-      status: b.status, cls: clsFor(b.id), day: 0, totalDays: 1,
-      stats: { km: 0, photos: 0 },
+      status: b.status, cls: clsFor(b.id), currency: currencySymbol(b.baseCurrency),
       members: members.map((m) => ({
         id: m.userId,
         name: users[m.userId]?.name ?? 'Участник',
@@ -49,14 +48,22 @@ export const trips = {
   async balance(id: string) {
     if (MOCK) return wait(mock.settlements)
     const b = await api<BBalance>(`/trips/${id}/balance`)
-    const names = await namesFor(id)
+    const users = await usersFor(id)
     return b.transfers.map((t, i) => ({
       id: 'tr' + i,
-      from: t.from === session.userId ? 'Ты' : names[t.from] ?? 'Участник',
-      to: names[t.to] ?? 'Участник',
-      toInitial: (names[t.to] ?? '?')[0],
+      fromId: t.from,
+      toId: t.to,
+      toUsername: users[t.to]?.username ?? null,
+      from: t.from === session.userId ? 'Ты' : users[t.from]?.name ?? 'Участник',
+      to: t.to === session.userId ? 'Ты' : users[t.to]?.name ?? 'Участник',
+      toInitial: users[t.to]?.initial ?? '?',
       amount: Number(t.amount),
     }))
+  },
+  /** Зафиксировать наличный перевод (отметить долг оплаченным). */
+  async recordSettlement(id: string, body: { fromUser: string; toUser: string; amount: number }) {
+    if (MOCK) return wait({ ok: true })
+    return api(`/trips/${id}/settlements`, { method: 'POST', body })
   },
   async create(body: { title: string; baseCurrency: string; tripType?: string; startDate?: string; endDate?: string }) {
     if (MOCK) return wait({ id: mock.trip.id })
@@ -82,7 +89,7 @@ export const trips = {
       tripTitle: string; days: number; members: number; activities: number
       photos: number; expenses: number; expensesTotal: string; baseCurrency: string
     }>(`/trips/${id}/summary`)
-    const cur = s.baseCurrency === 'EUR' ? '€' : s.baseCurrency === 'USD' ? '$' : ''
+    const cur = currencySymbol(s.baseCurrency)
     return [
       { num: s.tripTitle, cap: 'Travel Wrapped', cls: 'g-a' },
       { num: String(s.days || s.activities), cap: s.days ? 'Дней вместе' : 'Активностей', cls: 'g-c' },

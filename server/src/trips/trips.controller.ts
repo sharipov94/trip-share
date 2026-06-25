@@ -4,6 +4,7 @@ import { CurrentUser, AuthUser } from '../common/decorators/current-user.decorat
 import { CreateTripDto } from './dto/create-trip.dto'
 import { UpdateTripDto } from './dto/update-trip.dto'
 import { BalanceService } from '../expenses/balance.service'
+import { RecordSettlementDto } from '../expenses/dto/record-settlement.dto'
 
 @Controller('trips')
 export class TripsController {
@@ -55,5 +56,10 @@ export class TripsController {
   @Get(':id/balance')
   getBalance(@CurrentUser() u: AuthUser, @Param('id') id: string) {
     return this.balance.computeForTrip(u.id, id)
+  }
+
+  @Post(':id/settlements')
+  recordSettlement(@CurrentUser() u: AuthUser, @Param('id') id: string, @Body() dto: RecordSettlementDto) {
+    return this.balance.record(u.id, id, dto)
   }
 }
