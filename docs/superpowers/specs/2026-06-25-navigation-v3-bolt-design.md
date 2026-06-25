@@ -138,8 +138,14 @@ No longer a tab; reached from the hero participants chip. Push screen, `nav={fal
   elsewhere — verify before deleting).
 - `screens/Splash.tsx` + `/splash` route.
 - `components/CreateFab.tsx` and its rendering in `BottomNav`.
-- `lib/currentTrip.ts` + `useCurrentTrip*` / `useActiveTrip*` hooks (ambient current trip).
-  Note: `TripShell` currently calls `useSetCurrentTrip` on mount; remove that coupling.
+- `Finance`/FAB-era ambient *guessing* in `lib/currentTrip.ts`. **Kept, simplified:** the
+  "first active / first trip" fallback is removed; `currentTrip` becomes a plain
+  "last-opened trip" set only by `TripShell` on entry and read by the trip-owned push
+  screens (`/expense/*`, `/balance`, `/settle`, `/activity/*`, `/upload`, `/invite`,
+  `/wrapped`). In v3 those screens are reachable only after entering a trip, so the value is
+  unambiguous — this dissolves review problems B/C without re-scoping ~10 routes under
+  `/trip/:id/*`. `useCurrentTripId()` returns the stored id or `''`; consumers redirect to
+  `/trips` when empty. `useAllExpenses` (global finance) is deleted.
 - In-trip «Итоги» (`trip/Summary.tsx`) as a tab (content folds into Обзор / Wrapped).
 - The emoji action-sheet and emoji tab icons.
 
