@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Screen, TopBar, Loading } from '../ui'
+import { Screen, TopBar, Loading } from '../components'
 import { useActiveTripId, useBingo } from '../api/queries'
 import { uploadBingo } from '../lib/uploads'
-import { tg } from '../tg'
+import { tg } from '../lib/tg'
 
 export default function Bingo() {
   const nav = useNavigate()

@@ -1,11 +1,8 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import { auth } from './api/endpoints'
+import { useEffect, useState, type ReactNode } from 'react'
+import { auth } from './api/auth'
 import { tokens, MOCK } from './api/client'
-import { tg } from './tg'
-
-type User = { id: string; firstName?: string | null; avatarUrl?: string | null; paymentDetails?: string | null }
-type AuthState = { ready: boolean; user: User | null; refresh: () => Promise<void> }
-const Ctx = createContext<AuthState>({ ready: false, user: null, refresh: async () => {} })
+import { tg } from './lib/tg'
+import { AuthCtx, type User } from './auth-context'
 
 function fromTelegram(): User | null {
   const u = tg.user
@@ -62,7 +59,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })()
   }, [])
 
-  return <Ctx.Provider value={{ ...state, refresh }}>{children}</Ctx.Provider>
+  return <AuthCtx.Provider value={{ ...state, refresh }}>{children}</AuthCtx.Provider>
 }
-
-export const useAuth = () => useContext(Ctx)

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { Screen, TopBar } from '../ui'
+import { Screen, TopBar } from '../components'
 import { useActiveTripId, useCreateActivity } from '../api/queries'
 
 const today = new Date().toISOString().slice(0, 10)

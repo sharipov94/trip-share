@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Screen, TopBar } from '../ui'
+import { Screen, TopBar } from '../components'
 import { useActiveTripId } from '../api/queries'
 import { uploadMemory } from '../lib/uploads'
-import { tg } from '../tg'
+import { tg } from '../lib/tg'
 
 const phases = [
   { id: 'before_activity', label: 'До активности' },

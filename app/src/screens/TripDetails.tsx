@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Screen, TopBar, Icon, Loading, Empty, Av } from '../ui'
+import { Screen, TopBar, Icon, Loading, Empty, Av } from '../components'
 import { useTrip, useTrips, useActivities, useExpenses, useMemories } from '../api/queries'
 
 type Tab = 'overview' | 'activities' | 'expenses' | 'memories' | 'summary'

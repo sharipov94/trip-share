@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { Screen, TopBar, Av } from '../ui'
-import { useAuth } from '../auth'
+import { Screen, TopBar, Av } from '../components'
+import { useAuth } from '../auth-context'
 import { useUpdateProfile } from '../api/queries'
 
 export default function ProfileEdit() {
