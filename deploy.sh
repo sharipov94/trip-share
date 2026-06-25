@@ -9,14 +9,18 @@
 #
 set -euo pipefail
 
-HOST="${DEPLOY_HOST:-root@78.17.126.240}"
+cd "$(dirname "$0")"
+
+# Адрес сервера держим вне git: deploy.env (gitignored, см. deploy.env.example).
+# shellcheck disable=SC1091
+[ -f deploy.env ] && { set -a; . ./deploy.env; set +a; }
+
+HOST="${DEPLOY_HOST:?не задан DEPLOY_HOST — скопируй deploy.env.example в deploy.env и заполни}"
 PORT="${DEPLOY_PORT:-22}"
 REMOTE="${DEPLOY_DIR:-/opt/travelmate}"
 API_URL="${VITE_API_URL:-https://trip-radar.ru}"
 SSH="ssh -p $PORT"
 COMPOSE="docker compose -f docker-compose.prod.yml"
-
-cd "$(dirname "$0")"
 
 echo "==> 1/6 Сборка фронта (VITE_API_URL=$API_URL)"
 ( cd app && VITE_API_URL="$API_URL" npm run build )

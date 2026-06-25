@@ -5,7 +5,7 @@
 ## Где живёт прод
 
 - **Домен:** https://trip-radar.ru (TLS выпускает Caddy автоматически)
-- **Сервер:** VPS, `root@78.17.126.240` (SSH порт 22), каталог `/opt/travelmate`
+- **Сервер:** VPS, каталог `/opt/travelmate`. Адрес/порт — в gitignored `deploy.env` (см. `deploy.env.example`)
 - **Reverse-proxy:** системный Caddy, [`/etc/caddy/Caddyfile`](../Caddyfile) (копия в репо)
 
 Раскладка `/opt/travelmate` на сервере:
@@ -45,7 +45,8 @@ Caddy маршрутизирует: `/api/*` → `127.0.0.1:3000` (NestJS), `/up
 Скрипт печатает команду отката в конце. Вручную:
 
 ```bash
-ssh root@78.17.126.240 'cd /opt/travelmate && rm -rf web && mv web.bak web && \
+# $DEPLOY_HOST берётся из deploy.env
+ssh "$DEPLOY_HOST" 'cd /opt/travelmate && rm -rf web && mv web.bak web && \
   docker tag travelmate-api:rollback travelmate-api:latest && \
   docker compose -f docker-compose.prod.yml up -d api'
 ```
