@@ -42,7 +42,7 @@ export default function TripShell() {
         <button className={'hero-cover' + (cover.isPending ? ' busy' : '')} aria-label={trip?.coverUrl ? 'Сменить обложку' : 'Добавить обложку'} disabled={cover.isPending} onClick={() => fileRef.current?.click()}>
           <Icon.cam />
         </button>
-        <div className="hero-cap">
+        <div className="hero-cap" style={{ cursor: 'pointer' }} onClick={() => nav(`/trip/${id}/edit`)}>
           <div className="hero-meta">{trip ? STATUS[trip.status] : ''}{trip?.dates ? ' · ' + trip.dates : ''}</div>
           <h1 className="hero-title">{trip?.title ?? 'Поездка'}</h1>
         </div>

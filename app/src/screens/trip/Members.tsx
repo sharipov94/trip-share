@@ -12,7 +12,6 @@ export default function Members() {
     <Screen nav={false}>
       <TopBar title="Участники" onBack={() => nav(-1)} />
       <button className="btn-grad" style={{ margin: '4px 0 6px' }} onClick={() => nav('/invite')}><Icon.plus /> Пригласить участников</button>
-      <button className="btn-ghost" style={{ width: '100%', marginBottom: 6 }} onClick={() => nav('/trip/' + id + '/edit')}>Изменить поездку</button>
       <div className="sec"><h2>Участники</h2><div className="line" /><span className="cnt">{trip?.members.length ?? 0}</span></div>
       {trip?.members.map((m, i) => (
         <div key={m.id} className="row-item">
