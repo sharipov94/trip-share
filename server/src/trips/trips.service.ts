@@ -8,6 +8,7 @@ import { MembershipService } from '../common/membership.service'
 import { saveImage } from '../common/image-store'
 import { CreateTripDto } from './dto/create-trip.dto'
 import { UpdateTripDto } from './dto/update-trip.dto'
+import { PhotoReminderService } from '../notifications/photo-reminder.service'
 
 @Injectable()
 export class TripsService {
@@ -18,6 +19,7 @@ export class TripsService {
     @InjectRepository(Trip) private readonly trips: Repository<Trip>,
     @InjectRepository(TripMember) private readonly members: Repository<TripMember>,
     private readonly membership: MembershipService,
+    private readonly photoReminder: PhotoReminderService,
   ) {}
 
   async create(userId: string, dto: CreateTripDto): Promise<Trip> {
@@ -33,6 +35,9 @@ export class TripsService {
       }),
     )
     await this.members.save(this.members.create({ tripId: trip.id, userId, role: 'owner' }))
+    if (trip.startDate && trip.endDate) {
+      await this.photoReminder.scheduleForTrip(trip)
+    }
     return trip
   }
 
@@ -70,13 +75,29 @@ export class TripsService {
   async update(userId: string, tripId: string, dto: UpdateTripDto): Promise<Trip> {
     await this.membership.assertRole(userId, tripId, ['owner', 'admin'])
     const trip = await this.trips.findOneOrFail({ where: { id: tripId } })
+    const oldStartDate = trip.startDate
+    const oldEndDate = trip.endDate
+
     if (dto.title !== undefined) trip.title = dto.title
     if (dto.description !== undefined) trip.description = dto.description
     if (dto.tripType !== undefined) trip.tripType = dto.tripType as any
     if (dto.status !== undefined) trip.status = dto.status as any
     if (dto.startDate !== undefined) trip.startDate = dto.startDate
     if (dto.endDate !== undefined) trip.endDate = dto.endDate
-    return this.trips.save(trip)
+
+    const saved = await this.trips.save(trip)
+
+    const datesChanged = saved.startDate !== oldStartDate || saved.endDate !== oldEndDate
+    if (datesChanged) {
+      if (oldStartDate && oldEndDate) {
+        await this.photoReminder.cancelForTrip({ ...saved, startDate: oldStartDate, endDate: oldEndDate } as Trip)
+      }
+      if (saved.startDate && saved.endDate) {
+        await this.photoReminder.scheduleForTrip(saved)
+      }
+    }
+
+    return saved
   }
 
   async setCover(userId: string, tripId: string, file: Express.Multer.File): Promise<{ coverUrl: string }> {
