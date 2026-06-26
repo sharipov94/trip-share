@@ -27,4 +27,23 @@ export class TelegramBotService {
       return false
     }
   }
+
+  /** Like sendMessage, but returns the Telegram message_id (needed for reply-based context lookup). */
+  async sendMessageGetId(chatId: string | number, text: string): Promise<number | null> {
+    const token = this.cfg.get<string>('BOT_TOKEN')
+    if (!token) return null
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
+      })
+      if (!res.ok) { this.log.warn(`sendMessageGetId ${chatId}: ${res.status}`); return null }
+      const data = await res.json() as { result: { message_id: number } }
+      return data.result.message_id
+    } catch (e) {
+      this.log.error(`sendMessageGetId failed: ${(e as Error).message}`)
+      return null
+    }
+  }
 }
