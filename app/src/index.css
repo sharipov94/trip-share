@@ -255,11 +255,18 @@ body{margin:0;background:#000;font-family:"Hanken Grotesk",system-ui,sans-serif}
 /* wrapped slide */
 .wrap-slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
   padding:calc(40px + var(--tg-top,0px)) 30px 120px;color:var(--on-grad)}
-.wrap-num{font-family:"Unbounded";font-weight:900;font-size:88px;line-height:.85;letter-spacing:-3px}
-.wrap-cap{font-family:"Unbounded";font-weight:800;font-size:20px;text-transform:uppercase;margin-top:14px;max-width:80%}
-.wrap-dots{position:absolute;top:calc(12px + var(--tg-top,0px));left:18px;right:18px;display:flex;gap:5px;z-index:5}
-.wrap-dots i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.3)}
-.wrap-dots i.on{background:#fff}
+.wrap-num{font-family:"Unbounded";font-weight:900;font-size:88px;line-height:.85;letter-spacing:-3px;
+  max-width:100%;overflow-wrap:anywhere}
+.wrap-title{font-family:"Unbounded";font-weight:900;line-height:.95;letter-spacing:-1px;
+  font-size:clamp(34px,11vw,52px);max-width:100%;overflow-wrap:anywhere;hyphens:auto}
+.wrap-cap{font-family:"Unbounded";font-weight:800;font-size:20px;text-transform:uppercase;margin-top:14px;
+  max-width:90%;overflow-wrap:anywhere}
+.wrap-bars{position:absolute;top:calc(12px + var(--tg-top,0px));left:18px;right:18px;display:flex;gap:5px;z-index:5}
+.wrap-bar{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.3);overflow:hidden;position:relative}
+.wrap-bar .fill{position:absolute;inset:0;background:#fff;border-radius:3px}
+.wrap-bar .fill.done{width:100%}
+.wrap-bar .fill.live{width:0;animation:wrapfill linear forwards}
+@keyframes wrapfill{to{width:100%}}
 
 /* bottom nav */
 .nav{position:absolute;left:14px;right:14px;bottom:16px;z-index:40;height:66px;background:var(--nav-bg);

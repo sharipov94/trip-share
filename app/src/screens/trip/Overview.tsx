@@ -88,13 +88,15 @@ export default function Overview() {
         </>
       )}
 
-      {/* wrapped */}
-      <div className="day" onClick={() => nav('/wrapped')} style={{ cursor: 'pointer', marginTop: 16 }}>
-        <div className="lbl">Travel Wrapped</div>
-        <div className="font-display" style={{ fontWeight: 900, fontSize: 22, marginTop: 6, lineHeight: 1.05 }}>
-          История поездки в слайдах →
+      {/* wrapped — только для завершённой поездки */}
+      {trip?.status === 'finished' && (
+        <div className="day" onClick={() => nav('/wrapped')} style={{ cursor: 'pointer', marginTop: 16 }}>
+          <div className="lbl">Travel Wrapped</div>
+          <div className="font-display" style={{ fontWeight: 900, fontSize: 22, marginTop: 6, lineHeight: 1.05 }}>
+            История поездки в слайдах →
+          </div>
         </div>
-      </div>
+      )}
     </>
   )
 }
