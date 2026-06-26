@@ -93,6 +93,17 @@ export function useInvite(tripId: string) {
   return useMutation({ mutationFn: () => trips.invite(tripId) })
 }
 
+export function useUploadCover(tripId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (file: File) => trips.uploadCover(tripId, file),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: qk.trip(tripId) })
+      qc.invalidateQueries({ queryKey: qk.trips })
+    },
+  })
+}
+
 export function useDeleteTrip() {
   const qc = useQueryClient()
   return useMutation({

@@ -298,7 +298,13 @@ body{margin:0;background:#000;font-family:"Hanken Grotesk",system-ui,sans-serif}
 .hero-back{left:12px;width:36px;padding:0}
 .hero-people{right:12px;padding:0 12px;font-size:13px}
 .hero-back svg,.hero-people svg{width:18px;height:18px}
-.hero-cap{position:relative;z-index:2;padding:14px 16px}
+.hero-cover{position:absolute;right:12px;bottom:12px;z-index:2;border:none;cursor:pointer;width:34px;height:34px;
+  background:rgba(0,0,0,.4);backdrop-filter:blur(4px);color:#fff;border-radius:999px;
+  display:inline-flex;align-items:center;justify-content:center}
+.hero-cover svg{width:17px;height:17px;stroke:#fff}
+.hero-cover:disabled{opacity:.6}
+.hero-cover.busy{animation:breathe 1s ease-in-out infinite}
+.hero-cap{position:relative;z-index:2;padding:14px 16px;max-width:78%}
 .hero-meta{font-size:12px;opacity:.9;margin-bottom:3px}
 .hero-title{font-family:"Hanken Grotesk";font-weight:900;font-size:24px;margin:0}
 .pills{display:flex;gap:8px;margin-bottom:14px}

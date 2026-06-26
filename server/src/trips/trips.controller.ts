@@ -1,4 +1,6 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { memoryStorage } from 'multer'
 import { TripsService } from './trips.service'
 import { CurrentUser, AuthUser } from '../common/decorators/current-user.decorator'
 import { CreateTripDto } from './dto/create-trip.dto'
@@ -37,6 +39,14 @@ export class TripsController {
   @HttpCode(204)
   remove(@CurrentUser() u: AuthUser, @Param('id') id: string) {
     return this.trips.remove(u.id, id)
+  }
+
+  @Post(':id/cover')
+  @UseInterceptors(
+    FileInterceptor('photo', { storage: memoryStorage(), limits: { fileSize: 8 * 1024 * 1024 } }),
+  )
+  setCover(@CurrentUser() u: AuthUser, @Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
+    return this.trips.setCover(u.id, id, file)
   }
 
   @Get(':id/members')

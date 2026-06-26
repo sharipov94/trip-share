@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { randomBytes } from 'crypto'
 import { In, Repository } from 'typeorm'
 import { Trip } from '../entities/trip.entity'
 import { TripMember } from '../entities/trip-member.entity'
 import { MembershipService } from '../common/membership.service'
+import { saveImage } from '../common/image-store'
 import { CreateTripDto } from './dto/create-trip.dto'
 import { UpdateTripDto } from './dto/update-trip.dto'
 
@@ -76,6 +77,17 @@ export class TripsService {
     if (dto.startDate !== undefined) trip.startDate = dto.startDate
     if (dto.endDate !== undefined) trip.endDate = dto.endDate
     return this.trips.save(trip)
+  }
+
+  async setCover(userId: string, tripId: string, file: Express.Multer.File): Promise<{ coverUrl: string }> {
+    await this.membership.assertRole(userId, tripId, ['owner', 'admin'])
+    if (!file) throw new BadRequestException('Файл не передан')
+    if (!['image/jpeg', 'image/png', 'image/webp', 'image/heic'].includes(file.mimetype))
+      throw new BadRequestException('Только изображения')
+    const trip = await this.trips.findOneOrFail({ where: { id: tripId } })
+    trip.coverUrl = await saveImage(file)
+    await this.trips.save(trip)
+    return { coverUrl: trip.coverUrl }
   }
 
   async remove(userId: string, tripId: string): Promise<void> {

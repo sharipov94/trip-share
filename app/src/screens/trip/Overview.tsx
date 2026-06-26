@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { Empty, Av } from '../../components'
 import { useTrip, useActivities, useExpenses, useBalance, useMemories } from '../../api/queries'
-import { myBalances } from '../../lib/balance'
+import { myBalances, myNet } from '../../lib/balance'
 
 export default function Overview() {
   const nav = useNavigate()
@@ -13,12 +13,24 @@ export default function Overview() {
   const { data: photos } = useMemories(id)
 
   const mine = myBalances(balance ?? [])
+  const net = myNet(balance ?? [])
+  const total = expenses?.reduce((s, e) => s + e.amount, 0) ?? 0
   const cur = trip?.currency || '€'
   const upcoming = (activities ?? []).slice(0, 2)
   const recent = [...(expenses ?? [])].slice(0, 3)
 
   return (
     <>
+      {/* сводка-бар — только на «Обзор» */}
+      <div className="pills">
+        <div className="pill"><span className="pl">Потрачено</span><b>{cur}{total}</b></div>
+        <div className="pill">
+          <span className="pl">{net >= 0 ? 'Должны тебе' : 'Ты должен'}</span>
+          <b className={net > 0 ? 'pos' : net < 0 ? 'neg' : ''}>{net === 0 ? 'Рассчитано' : cur + Math.abs(net)}</b>
+        </div>
+        <div className="pill"><span className="pl">Участники</span><b>{trip?.members.length ?? 0}</b></div>
+      </div>
+
       {/* мой баланс — все долги, не только один */}
       <div className="sec"><h2>Мой баланс</h2><div className="line" />
         {mine.length > 0 && <button className="cnt" onClick={() => nav('/balance')}>Все →</button>}

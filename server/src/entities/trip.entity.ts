@@ -23,6 +23,9 @@ export class Trip {
   @Column({ type: 'char', length: 3 })
   baseCurrency: string
 
+  @Column({ type: 'text', nullable: true })
+  coverUrl: string | null
+
   @Column({ type: 'date', nullable: true })
   startDate: string | null
 
