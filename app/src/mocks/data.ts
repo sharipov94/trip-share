@@ -121,3 +121,11 @@ export const wrappedPersonal = [
   { num: '23 км', cap: 'Прошёл за поездку', cls: 'g-a' },
   { num: '€164', cap: 'Твоя доля расходов', cls: 'g-c' },
 ]
+
+// Mock-фото для календаря. tripList[0] = bcn-2027 (active, startDate = 2027-06-12).
+// takenAt noon UTC по дням поездки.
+export const calendarPhotos: import('../api/memories').Memory[] = [
+  { id: 'cp1', url: '', author: 'Ты', phase: 'before_trip',  takenAt: '2027-06-10T12:00:00Z', userId: 'me' },
+  { id: 'cp2', url: '', author: 'Ты', phase: 'during_trip',  takenAt: '2027-06-12T12:00:00Z', userId: 'me' },
+  { id: 'cp3', url: '', author: 'Аня', phase: 'during_trip', takenAt: '2027-06-13T12:00:00Z', userId: 'u1' },
+]

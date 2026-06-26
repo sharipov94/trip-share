@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn } from 
 
 export type MemoryPhase =
   | 'before_activity' | 'during_activity' | 'after_activity'
-  | 'before_trip' | 'after_trip'
+  | 'before_trip' | 'during_trip' | 'after_trip'
 
 @Entity('memories')
 @Index(['tripId', 'takenAt'])
