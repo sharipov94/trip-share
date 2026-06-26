@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Screen, TopBar } from '../components'
@@ -6,22 +6,15 @@ import { useActiveTripId } from '../api/queries'
 import { uploadMemory } from '../lib/uploads'
 import { tg } from '../lib/tg'
 
-const phases = [
-  { id: 'before_activity', label: 'До мероприятия' },
-  { id: 'during_activity', label: 'Во время' },
-  { id: 'after_activity', label: 'После мероприятия' },
-  { id: 'before_trip', label: 'До поездки' },
-  { id: 'after_trip', label: 'После поездки' },
-]
-
 export default function PhotoUpload() {
   const nav = useNavigate()
   const qc = useQueryClient()
   const tripId = useActiveTripId()
+  const location = useLocation()
+  const slotState = (location.state as { phase?: string; takenAt?: string } | null) ?? {}
   const inputRef = useRef<HTMLInputElement>(null)
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
-  const [phase, setPhase] = useState(phases[1].id)
 
   const onPick = (f: File | undefined) => {
     if (!f) return
@@ -32,8 +25,7 @@ export default function PhotoUpload() {
   const submit = () => {
     if (!file) return inputRef.current?.click()
     tg.haptic('medium')
-    // загрузка в фоне: уходим сразу, фото догрузится и без этого экрана
-    uploadMemory(qc, tripId, file, phase)
+    uploadMemory(qc, tripId, file, slotState.phase, slotState.takenAt)
     nav(-1)
   }
 
@@ -68,16 +60,7 @@ export default function PhotoUpload() {
         )}
       </div>
 
-      <div className="field" style={{ marginTop: 18 }}>
-        <label>Когда снято</label>
-        <div className="strip" style={{ gap: 7 }}>
-          {phases.map((p) => (
-            <button key={p.id} className={p.id === phase ? 'btn-grad' : 'btn-ghost'} style={{ width: 'auto', flexShrink: 0, padding: '10px 14px', fontSize: 12.5 }} onClick={() => setPhase(p.id)}>{p.label}</button>
-          ))}
-        </div>
-      </div>
-
-      <button className="btn-grad" style={{ marginTop: 10 }} onClick={submit}>
+      <button className="btn-grad" style={{ marginTop: 18 }} onClick={submit}>
         {file ? 'Загрузить' : 'Выбрать фото'}
       </button>
       {file && <p className="sub" style={{ textAlign: 'center', marginTop: 10 }}>Загрузится в фоне — можно сразу вернуться к поездке</p>}
