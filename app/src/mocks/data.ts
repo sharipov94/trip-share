@@ -8,6 +8,7 @@ export const tripList: Trip[] = [
   {
     id: 'bcn-2027', title: 'Барселона 2027', dates: '12–19 июня · 5 человек',
     status: 'active', cls: 'g-a', currency: '€',
+    startDate: '2027-06-12', endDate: '2027-06-19',
     members: M('Никита', 'Аня', 'Макс', 'Даша', 'Лев'),
   },
   {
