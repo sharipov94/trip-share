@@ -18,7 +18,11 @@ export class BotWebhookController {
     @Body() body: TelegramUpdate,
   ): Promise<void> {
     const expected = this.cfg.get<string>('BOT_WEBHOOK_SECRET') ?? ''
-    if (expected && secret !== expected) return
+    if (!expected) {
+      // fail closed: no secret configured means we can't verify; reject
+      return
+    }
+    if (secret !== expected) return
     await this.bot.handleUpdate(body)
   }
 }
