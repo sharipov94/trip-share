@@ -16,6 +16,7 @@ import { NotificationsModule } from './notifications/notifications.module'
 import { SummaryModule } from './summary/summary.module'
 import { ReceiptsModule } from './receipts/receipts.module'
 import { BingoModule } from './bingo/bingo.module'
+import { BotModule } from './bot/bot.module'
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { BingoModule } from './bingo/bingo.module'
     SummaryModule,
     ReceiptsModule,
     BingoModule,
+    BotModule,
   ],
   providers: [
     // глобальный JWT-guard; публичные роуты помечаются @Public()

@@ -9,5 +9,6 @@ import { MemoriesController } from './memories.controller'
   imports: [TypeOrmModule.forFeature([Memory, Activity])],
   providers: [MemoriesService],
   controllers: [MemoriesController],
+  exports: [MemoriesService],
 })
 export class MemoriesModule {}
