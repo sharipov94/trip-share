@@ -2,6 +2,11 @@
 # Лежит на сервере в /etc/caddy/Caddyfile — здесь версионируемая копия.
 # Caddy сам выпускает и продлевает TLS.
 trip-radar.ru {
+    # Access-логи в journald (читать: journalctl -u caddy | grep '"uri":"/api')
+    log {
+        format json
+    }
+
     encode gzip
 
     # API → NestJS на localhost

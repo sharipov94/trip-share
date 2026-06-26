@@ -66,11 +66,18 @@ async function tryRefresh(): Promise<boolean> {
 
 /** Загрузка файла (multipart). content-type выставит браузер с boundary. */
 export async function apiUpload<T>(path: string, form: FormData): Promise<T> {
-  const res = await fetch(`${BASE}/api/v1${path}`, {
-    method: 'POST',
-    headers: tokens.access ? { authorization: `Bearer ${tokens.access}` } : {},
-    body: form,
-  })
+  const send = () =>
+    fetch(`${BASE}/api/v1${path}`, {
+      method: 'POST',
+      headers: tokens.access ? { authorization: `Bearer ${tokens.access}` } : {},
+      body: form,
+    })
+  let res = await send()
+  // как в api(): один авто-refresh при 401 (access живёт 15 мин — иначе загрузка молча падает)
+  if (res.status === 401 && tokens.refresh) {
+    const ok = await tryRefresh()
+    if (ok) res = await send()
+  }
   return unwrap<T>(res)
 }
 
