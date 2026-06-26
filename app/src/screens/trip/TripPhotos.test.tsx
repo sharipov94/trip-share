@@ -7,9 +7,10 @@ import TripPhotos from './TripPhotos'
 
 afterEach(() => vi.restoreAllMocks())
 
-it('switches between Лента and Бинго segments', () => {
+it('shows Календарь and Бинго segments', () => {
   vi.spyOn(q, 'useMemories').mockReturnValue({ data: [] } as any)
   vi.spyOn(q, 'useBingo').mockReturnValue({ data: { completed: 0, total: 9, tasks: [] }, isLoading: false } as any)
+  vi.spyOn(q, 'useTrip').mockReturnValue({ data: { startDate: '2027-06-12', endDate: '2027-06-14', members: [] } } as any)
   const qc = new QueryClient()
   render(
     <QueryClientProvider client={qc}>
@@ -18,7 +19,7 @@ it('switches between Лента and Бинго segments', () => {
       </MemoryRouter>
     </QueryClientProvider>,
   )
-  expect(screen.getByText('Лента')).toBeTruthy()
+  expect(screen.getByText('Календарь')).toBeTruthy()
   fireEvent.click(screen.getByText('Бинго'))
   expect(screen.getByText('Собрано')).toBeTruthy()
 })

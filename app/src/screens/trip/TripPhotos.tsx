@@ -5,13 +5,13 @@ import { Icon, Empty, Loading } from '../../components'
 import { useMemories, useBingo } from '../../api/queries'
 import { uploadBingo } from '../../lib/uploads'
 import { tg } from '../../lib/tg'
+import PhotoCalendar from './PhotoCalendar'
 
 export default function TripPhotos() {
   const nav = useNavigate()
   const qc = useQueryClient()
   const { id = '' } = useParams()
-  const [seg, setSeg] = useState<'feed' | 'bingo'>('feed')
-  const { data: photos } = useMemories(id)
+  const [seg, setSeg] = useState<'calendar' | 'bingo'>('calendar')
   const { data: bingo, isLoading } = useBingo(id)
   const inputRef = useRef<HTMLInputElement>(null)
   const [activeKey, setActiveKey] = useState<string | null>(null)
@@ -24,26 +24,11 @@ export default function TripPhotos() {
   return (
     <>
       <div className="seg" style={{ marginBottom: 14 }}>
-        <button className={seg === 'feed' ? 'on' : ''} onClick={() => setSeg('feed')}>Лента</button>
+        <button className={seg === 'calendar' ? 'on' : ''} onClick={() => setSeg('calendar')}>Календарь</button>
         <button className={seg === 'bingo' ? 'on' : ''} onClick={() => setSeg('bingo')}>Бинго</button>
       </div>
 
-      {seg === 'feed' && (
-        <>
-          {(!photos || photos.length === 0) && <Empty text="Фотографий пока нет. Загрузи первое воспоминание 📸" />}
-          {photos && photos.length > 0 && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-              {photos.map((p) => (
-                <div key={p.id} className="shot" style={{ width: '100%', height: 104 }}>
-                  <img src={p.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  {p.author && <div className="tag">{p.author}</div>}
-                </div>
-              ))}
-            </div>
-          )}
-          <button className="btn-grad" style={{ marginTop: 14 }} onClick={() => nav('/upload')}><Icon.plus /> Добавить фото</button>
-        </>
-      )}
+      {seg === 'calendar' && <PhotoCalendar tripId={id} />}
 
       {seg === 'bingo' && (
         <>
