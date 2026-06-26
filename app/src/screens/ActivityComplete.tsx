@@ -16,6 +16,7 @@ export default function ActivityComplete() {
 
   const people = Math.max(1, trip?.members.length ?? 1)
   const per = amount ? (Number(amount) / people).toFixed(2) : '0'
+  const cur = trip?.currency || '€'
   const busy = complete.isPending || createExpense.isPending
 
   const submit = () => {
@@ -23,7 +24,7 @@ export default function ActivityComplete() {
     tg.haptic('medium')
     // создаём расход на сумму активности, затем помечаем её завершённой
     createExpense.mutate(
-      { amount: Number(amount), currency: 'EUR', category: 'activity', title: act?.title || 'Активность' },
+      { amount: Number(amount), currency: trip?.baseCurrency || 'EUR', category: 'activity', title: act?.title || 'Активность' },
       {
         onSettled: () => {
           if (id) complete.mutate(id, { onSettled: () => nav('/balance') })
@@ -43,13 +44,13 @@ export default function ActivityComplete() {
       </div>
 
       <div className="card" style={{ textAlign: 'center', padding: '22px 16px', margin: '14px 0' }}>
-        <div className="lbl" style={{ color: 'var(--muted)' }}>Итого, €</div>
+        <div className="lbl" style={{ color: 'var(--muted)' }}>Итого, {cur}</div>
         <input className="amount-big" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ''))} inputMode="decimal" placeholder="0" />
       </div>
 
       <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div className="sub" style={{ margin: 0 }}>Делим на {people} {people === 1 ? 'участника' : 'участников'}</div>
-        <div className="font-display" style={{ fontWeight: 800, fontSize: 18 }}>€{per} / чел</div>
+        <div className="font-display" style={{ fontWeight: 800, fontSize: 18 }}>{cur}{per} / чел</div>
       </div>
 
       <button className="btn-grad" style={{ marginTop: 16 }} disabled={busy} onClick={submit}>

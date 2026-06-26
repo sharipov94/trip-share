@@ -28,7 +28,7 @@ export default function ActivityNew() {
         description: desc.trim() || undefined,
         activityUrl: url.trim() || undefined,
         price: price ? Number(price) : undefined,
-        currency: price ? 'EUR' : undefined,
+        currency: price ? trip?.baseCurrency || 'EUR' : undefined,
       },
       { onSettled: () => nav(-1) },
     )
@@ -45,7 +45,7 @@ export default function ActivityNew() {
       </div>
       <div className="field"><label>Описание</label><input placeholder="Что и где" value={desc} onChange={(e) => setDesc(e.target.value)} /></div>
       <div className="field"><label>Ссылка</label><input placeholder="https://…" value={url} onChange={(e) => setUrl(e.target.value)} /></div>
-      <div className="field"><label>Стоимость (опц.), €</label><input inputMode="decimal" placeholder="15" value={price} onChange={(e) => setPrice(e.target.value.replace(/[^\d.]/g, ''))} /></div>
+      <div className="field"><label>Стоимость (опц.), {trip?.currency || '€'}</label><input inputMode="decimal" placeholder="15" value={price} onChange={(e) => setPrice(e.target.value.replace(/[^\d.]/g, ''))} /></div>
 
       <button className="btn-grad" style={{ marginTop: 8 }} disabled={create.isPending} onClick={submit}>
         {create.isPending ? 'Создаём…' : 'Создать и оповестить'}

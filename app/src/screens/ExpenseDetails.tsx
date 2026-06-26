@@ -24,7 +24,7 @@ export default function ExpenseDetails() {
 
       <div className="debt" style={{ background: 'var(--g3)' }}>
         <div className="k">{e.title}</div>
-        <div className="v">€{e.amount}</div>
+        <div className="v">{e.cur}{e.amount}</div>
         <div style={{ fontSize: 12.5, fontWeight: 600, opacity: .9, marginTop: 6, position: 'relative' }}>{e.cat} · платил {e.payer}</div>
       </div>
 
@@ -38,7 +38,7 @@ export default function ExpenseDetails() {
             <div className="ttl" style={{ fontSize: 14.5 }}>{p.name}</div>
             <div className="sub">{p.isPayer ? 'оплатил' : 'должен'}</div>
           </div>
-          <div className="amt" style={{ color: p.isPayer ? 'var(--ok)' : 'var(--ink)' }}>€{p.amount}</div>
+          <div className="amt" style={{ color: p.isPayer ? 'var(--ok)' : 'var(--ink)' }}>{e.cur}{p.amount}</div>
         </div>
       ))}
     </Screen>

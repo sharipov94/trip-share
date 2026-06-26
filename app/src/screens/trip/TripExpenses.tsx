@@ -1,16 +1,18 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { Icon, Loading, Empty } from '../../components'
-import { useExpenses } from '../../api/queries'
+import { useExpenses, useTrip } from '../../api/queries'
 
 export default function TripExpenses() {
   const nav = useNavigate()
   const { id = '' } = useParams()
   const { data: expenses, isLoading } = useExpenses(id)
+  const { data: trip } = useTrip(id)
   const total = expenses?.reduce((s, e) => s + e.amount, 0) ?? 0
+  const cur = trip?.currency || '€'
   return (
     <>
       <div className="card" style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div><div className="sub" style={{ margin: 0 }}>Всего потрачено</div><div className="font-display" style={{ fontWeight: 900, fontSize: 26 }}>€{total}</div></div>
+        <div><div className="sub" style={{ margin: 0 }}>Всего потрачено</div><div className="font-display" style={{ fontWeight: 900, fontSize: 26 }}>{cur}{total}</div></div>
         <button className="btn-ghost" onClick={() => nav('/balance')}>Баланс →</button>
       </div>
       {isLoading && <Loading />}

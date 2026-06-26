@@ -22,12 +22,13 @@ export default function ExpenseNew() {
 
   const people = Math.max(1, trip?.members.length ?? 1)
   const per = amount ? (Number(amount) / people).toFixed(2) : '0'
+  const cur = trip?.currency || '€'
 
   const submit = () => {
     if (!amount || Number(amount) <= 0) return
     tg.haptic('medium')
     create.mutate(
-      { amount: Number(amount), currency: 'EUR', category: 'other', title: title.trim() || cat },
+      { amount: Number(amount), currency: trip?.baseCurrency || 'EUR', category: 'other', title: title.trim() || cat },
       { onSettled: () => nav(-1) },
     )
   }
@@ -38,7 +39,7 @@ export default function ExpenseNew() {
 
       {/* amount */}
       <div className="card" style={{ textAlign: 'center', padding: '22px 16px', marginBottom: 16 }}>
-        <div className="lbl" style={{ color: 'var(--muted)' }}>Сумма, €</div>
+        <div className="lbl" style={{ color: 'var(--muted)' }}>Сумма, {cur}</div>
         <input className="amount-big" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ''))} inputMode="decimal" />
       </div>
 
@@ -66,7 +67,7 @@ export default function ExpenseNew() {
       {split === 'equal' ? (
         <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
           <div className="sub" style={{ margin: 0 }}>На {people} {people === 1 ? 'человека' : 'человек'}</div>
-          <div className="font-display" style={{ fontWeight: 800, fontSize: 18 }}>€{per} / чел</div>
+          <div className="font-display" style={{ fontWeight: 800, fontSize: 18 }}>{cur}{per} / чел</div>
         </div>
       ) : (
         <div className="card" style={{ marginTop: 4 }}>

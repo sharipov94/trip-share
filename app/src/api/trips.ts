@@ -26,7 +26,7 @@ export const trips = {
     const bs = await api<BTrip[]>('/trips')
     return bs.map((b) => ({
       id: b.id, title: b.title, dates: dateRange(b.startDate, b.endDate),
-      status: b.status, cls: clsFor(b.id), currency: currencySymbol(b.baseCurrency),
+      status: b.status, cls: clsFor(b.id), currency: currencySymbol(b.baseCurrency), baseCurrency: b.baseCurrency,
       coverUrl: b.coverUrl ?? null, members: [],
     }))
   },
@@ -38,7 +38,7 @@ export const trips = {
     return {
       id: b.id, title: b.title, dates: dateRange(b.startDate, b.endDate),
       startDate: b.startDate, endDate: b.endDate,
-      status: b.status, cls: clsFor(b.id), currency: currencySymbol(b.baseCurrency),
+      status: b.status, cls: clsFor(b.id), currency: currencySymbol(b.baseCurrency), baseCurrency: b.baseCurrency,
       coverUrl: b.coverUrl ?? null,
       members: members.map((m) => ({
         id: m.userId,

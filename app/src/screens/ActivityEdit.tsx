@@ -52,7 +52,7 @@ export default function ActivityEdit() {
             <div className="field" style={{ flex: 1 }}><label>Время</label><input type="time" value={time} onChange={(e) => setTime(e.target.value)} /></div>
           </div>
           <div className="field"><label>Описание</label><input value={desc} onChange={(e) => setDesc(e.target.value)} /></div>
-          <div className="field"><label>Стоимость (опц.), €</label><input inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value.replace(/[^\d.]/g, ''))} /></div>
+          <div className="field"><label>Стоимость (опц.), {trip?.currency || '€'}</label><input inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value.replace(/[^\d.]/g, ''))} /></div>
           <button className="btn-grad" style={{ marginTop: 8 }} disabled={update.isPending} onClick={save}>
             {update.isPending ? 'Сохраняем…' : 'Сохранить'}
           </button>

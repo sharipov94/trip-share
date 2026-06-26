@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { useRef, useState } from 'react'
 import { Screen, TopBar } from '../components'
-import { useActiveTripId, useReceiptOcr } from '../api/queries'
+import { useActiveTrip, useActiveTripId, useReceiptOcr } from '../api/queries'
 import { tg } from '../lib/tg'
 
 export default function Receipt() {
   const nav = useNavigate()
   const tripId = useActiveTripId()
+  const { data: trip } = useActiveTrip()
+  const cur = trip?.currency || '€'
   const ocr = useReceiptOcr(tripId)
   const inputRef = useRef<HTMLInputElement>(null)
   const [preview, setPreview] = useState<string | null>(null)
@@ -56,12 +58,12 @@ export default function Receipt() {
           {data.items.map((r, i) => (
             <div key={i} className="row-item" style={{ padding: '12px 14px' }}>
               <div className="grow"><div className="ttl" style={{ fontSize: 14.5 }}>{r.name}</div></div>
-              <div className="amt">€{r.price}</div>
+              <div className="amt">{cur}{r.price}</div>
             </div>
           ))}
           <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
             <div className="lbl" style={{ color: 'var(--muted)' }}>Итого распознано</div>
-            <div className="font-display" style={{ fontWeight: 900, fontSize: 22 }}>€{data.total}</div>
+            <div className="font-display" style={{ fontWeight: 900, fontSize: 22 }}>{cur}{data.total}</div>
           </div>
           <button className="btn-grad" style={{ marginTop: 14 }} onClick={() => nav(-1)}>Использовать сумму</button>
         </>

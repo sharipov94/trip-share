@@ -9,6 +9,7 @@ export type Trip = {
   status: 'active' | 'finished' | 'planning'
   cls: string
   currency: string
+  baseCurrency?: string
   coverUrl?: string | null
   members: { id: string; name: string; initial: string; avatarUrl?: string | null }[]
 }

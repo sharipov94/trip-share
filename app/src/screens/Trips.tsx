@@ -42,7 +42,12 @@ export default function Trips() {
           <div key={sec.status}>
             <div className="sec"><h2>{sec.title}</h2><div className="line" /><span className="cnt">{list.length}</span></div>
             {list.map((t) => (
-              <div key={t.id} className={'trip-card ' + t.cls} onClick={() => nav('/trip/' + t.id)}>
+              <div
+                key={t.id}
+                className={'trip-card ' + t.cls}
+                onClick={() => nav('/trip/' + t.id)}
+                style={t.coverUrl ? { backgroundImage: `linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.55)), url(${t.coverUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+              >
                 <div className="nm">{t.title}</div>
                 <div className="dt">{t.dates}</div>
                 <span className="badge" style={{ background: 'rgba(0,0,0,.25)', color: '#fff', marginTop: 12, position: 'relative' }}>{statusLabel[t.status]}</span>
