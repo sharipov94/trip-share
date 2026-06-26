@@ -24,7 +24,6 @@ import ActivityDetails from './screens/ActivityDetails'
 import ActivityNew from './screens/ActivityNew'
 import ActivityEdit from './screens/ActivityEdit'
 import ActivityComplete from './screens/ActivityComplete'
-import PhotoUpload from './screens/PhotoUpload'
 import Bingo from './screens/Bingo'
 import Wrapped from './screens/Wrapped'
 import Profile from './screens/Profile'
@@ -110,7 +109,6 @@ export default function App() {
           <Route path="/activity/:id/complete" element={<ActivityComplete />} />
           <Route path="/activity/:id" element={<ActivityDetails />} />
 
-          <Route path="/upload" element={<PhotoUpload />} />
           <Route path="/bingo" element={<Bingo />} />
 
           <Route path="/wrapped" element={<Wrapped />} />

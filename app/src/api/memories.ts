@@ -47,4 +47,8 @@ export const memories = {
     if (opts.takenAt) form.append('takenAt', opts.takenAt)
     return apiUpload(`/trips/${tripId}/memories`, form)
   },
+  async remove(id: string): Promise<void> {
+    if (MOCK) return wait(undefined as unknown as void)
+    await api(`/memories/${id}`, { method: 'DELETE' })
+  },
 }

@@ -2,6 +2,7 @@ import { QueryClient } from '@tanstack/react-query'
 import { compressImage } from './image'
 import { memories, type Memory } from '../api/memories'
 import { bingo, type BingoState } from '../api/bingo'
+import { session } from '../api/client'
 
 export function uploadMemory(
   qc: QueryClient,
@@ -13,7 +14,7 @@ export function uploadMemory(
   const tempId = 'tmp-' + Math.random().toString(36).slice(2)
   const localUrl = URL.createObjectURL(file)
   qc.setQueryData<Memory[]>(['memories', tripId], (old = []) => [
-    { id: tempId, url: localUrl, author: '', phase: phase ?? null, takenAt: takenAt ?? null, userId: null },
+    { id: tempId, url: localUrl, author: '', phase: phase ?? null, takenAt: takenAt ?? null, userId: session.userId || 'me' },
     ...old,
   ])
   ;(async () => {

@@ -1,6 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { join } from 'path'
+import { promises as fs } from 'fs'
 import { Memory, MemoryPhase } from '../entities/memory.entity'
 import { Activity } from '../entities/activity.entity'
 import { MembershipService } from '../common/membership.service'
@@ -51,5 +53,16 @@ export class MemoriesService {
     if (!activity) throw new NotFoundException('Активность не найдена')
     await this.membership.assertMember(userId, activity.tripId)
     return this.memories.find({ where: { activityId }, order: { takenAt: 'ASC' } })
+  }
+
+  async remove(userId: string, id: string): Promise<void> {
+    const m = await this.memories.findOne({ where: { id } })
+    if (!m) throw new NotFoundException('Фото не найдено')
+    if (m.userId !== userId) throw new ForbiddenException('Нет доступа')
+    // delete file (best-effort, don't fail if already gone)
+    const UPLOAD_DIR = process.env.UPLOAD_DIR ?? '/app/uploads'
+    const filename = m.photoUrl.replace(/^\/uploads\//, '')
+    await fs.unlink(join(UPLOAD_DIR, filename)).catch(() => {})
+    await this.memories.delete(id)
   }
 }

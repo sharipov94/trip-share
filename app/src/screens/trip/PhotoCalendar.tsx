@@ -5,6 +5,7 @@ import { session } from '../../api/client'
 import { buildSlots, slotStatus, slotKeyForUpload, slotKeyFromPhoto, type Slot } from '../../lib/photoSlots'
 import { uploadMemory } from '../../lib/uploads'
 import { tg } from '../../lib/tg'
+import { memories, type Memory } from '../../api/memories'
 
 interface PhotoCalendarProps { tripId: string }
 
@@ -109,7 +110,14 @@ export default function PhotoCalendar({ tripId }: PhotoCalendarProps) {
               <button
                 className="btn-ghost"
                 style={{ marginTop: 10, width: 'auto', padding: '8px 18px', fontSize: 13 }}
-                onClick={() => { setPendingSlot(selected); inputRef.current?.click() }}
+                onClick={async () => {
+                  // delete the existing photo optimistically, then open picker
+                  const toDelete = slotPhotos[0]
+                  qc.setQueryData<Memory[]>(['memories', tripId], (old = []) => old.filter(m => m.id !== toDelete.id))
+                  memories.remove(toDelete.id).catch(() => qc.invalidateQueries({ queryKey: ['memories', tripId] }))
+                  setPendingSlot(selected)
+                  inputRef.current?.click()
+                }}
               >
                 Заменить фото
               </button>

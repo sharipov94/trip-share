@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { memoryStorage } from 'multer'
 import { MemoriesService } from './memories.service'
@@ -30,5 +30,11 @@ export class MemoriesController {
     @Body() body: { phase?: MemoryPhase; activityId?: string; takenAt?: string },
   ) {
     return this.memories.create(u.id, tripId, file, body)
+  }
+
+  @Delete('memories/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@CurrentUser() u: AuthUser, @Param('id') id: string) {
+    return this.memories.remove(u.id, id)
   }
 }
