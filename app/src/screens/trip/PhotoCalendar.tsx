@@ -64,7 +64,8 @@ export default function PhotoCalendar({ tripId }: PhotoCalendarProps) {
 
       {/* горизонтальная лента */}
       <div style={{
-        display: 'flex', overflowX: 'auto', gap: 10, padding: '4px 2px 12px',
+        display: 'flex', overflowX: 'auto', gap: 10, padding: '4px 18px 12px',
+        margin: '0 -18px',
         scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch',
       }}>
         {slots.map((slot) => {
@@ -84,7 +85,7 @@ export default function PhotoCalendar({ tripId }: PhotoCalendarProps) {
                 opacity: st === 'locked' ? 0.4 : 1,
               }}
             >
-              <span className="lbl" style={{ fontSize: 10, color: st === 'done' ? 'var(--on-grad)' : undefined }}>
+              <span style={{ fontSize: 10, fontWeight: 700, opacity: 0.7, color: st === 'done' ? 'var(--on-grad)' : undefined }}>
                 {slot.label}
               </span>
               <span style={{ fontSize: 20, marginTop: 6, color: st === 'done' ? 'var(--on-grad)' : undefined }}>

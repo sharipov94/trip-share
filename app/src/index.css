@@ -238,7 +238,7 @@ body{margin:0;background:#000;font-family:"Hanken Grotesk",system-ui,sans-serif}
   font-family:"Unbounded";font-weight:900;font-size:54px;letter-spacing:-2px}
 
 /* tabs */
-.tabs{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin:4px 0 18px}
+.tabs{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin:4px -18px 18px;padding:0 18px}
 .tabs::-webkit-scrollbar{display:none}
 .tabs button,.tabs a{flex-shrink:0;display:inline-flex;align-items:center;text-decoration:none;
   border:1px solid var(--line);background:transparent;color:var(--muted);font-family:"Hanken Grotesk";
