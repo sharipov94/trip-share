@@ -82,7 +82,7 @@ export default function TripEdit() {
             </button>
           ) : (
             <>
-              <p className="sub" style={{ textAlign: 'center', margin: '0 4px 10px' }}>Удалить «{trip.title}» со всеми активностями и расходами? Это необратимо.</p>
+              <p className="sub" style={{ textAlign: 'center', margin: '0 4px 10px' }}>Удалить «{trip.title}» со всеми мероприятиями и расходами? Это необратимо.</p>
               <div style={{ display: 'flex', gap: 9 }}>
                 <button className="btn-ghost" style={{ flex: 1 }} disabled={del.isPending} onClick={() => setConfirmDel(false)}>Отмена</button>
                 <button className="btn-solid" style={{ flex: 1, background: 'var(--danger, #e5484d)', color: '#fff' }} disabled={del.isPending} onClick={remove}>

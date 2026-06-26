@@ -7,7 +7,7 @@ import { tg } from '../../lib/tg'
 const SUB = [
   { to: 'overview', label: 'Обзор' },
   { to: 'expenses', label: 'Расходы' },
-  { to: 'activities', label: 'Активности' },
+  { to: 'activities', label: 'Мероприятия' },
   { to: 'photos', label: 'Фото' },
 ]
 const STATUS: Record<string, string> = { planning: 'Планируется', active: 'Активна', finished: 'Завершена' }
@@ -34,7 +34,7 @@ export default function TripShell() {
     <Screen>
       {/* hero */}
       <div className={'hero ' + (trip?.cls ?? '')} style={trip?.coverUrl ? { backgroundImage: `url(${trip.coverUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}>
-        <button className="hero-back" aria-label="Назад" onClick={() => nav(-1)}><Icon.back /></button>
+        <button className="hero-back" aria-label="Назад" onClick={() => nav('/trips')}><Icon.back /></button>
         <button className="hero-people" onClick={() => nav(`/trip/${id}/members`)}>
           {trip?.members.length ?? 0} <Icon.user />
         </button>

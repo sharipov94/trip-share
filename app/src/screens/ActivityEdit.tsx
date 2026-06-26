@@ -42,7 +42,7 @@ export default function ActivityEdit() {
 
   return (
     <Screen nav={false}>
-      <TopBar title="Редактировать активность" onBack={() => nav(-1)} />
+      <TopBar title="Редактировать мероприятие" onBack={() => nav(-1)} />
       {isLoading && <Loading />}
       {act && (
         <>

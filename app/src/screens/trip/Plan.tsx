@@ -8,9 +8,9 @@ export default function Plan() {
   const { data: activities, isLoading } = useActivities(id)
   return (
     <>
-      <div className="sec"><h2>Все активности</h2><div className="line" /><span className="cnt">{activities?.length ?? 0}</span></div>
+      <div className="sec"><h2>Все мероприятия</h2><div className="line" /><span className="cnt">{activities?.length ?? 0}</span></div>
       {isLoading && <Loading />}
-      {activities && activities.length === 0 && <Empty text="Активностей пока нет" />}
+      {activities && activities.length === 0 && <Empty text="Мероприятий пока нет" />}
       {activities?.map((a) => (
         <div key={a.id} className={'act' + (a.night ? ' night' : '')} style={{ cursor: 'pointer' }} onClick={() => nav('/activity/' + a.id)}>
           <div className="bar" />
@@ -22,7 +22,7 @@ export default function Plan() {
           </div>
         </div>
       ))}
-      <button className="btn-grad" style={{ marginTop: 6 }} onClick={() => nav('/activity/new')}><Icon.plus /> Добавить активность</button>
+      <button className="btn-grad" style={{ marginTop: 6 }} onClick={() => nav('/activity/new')}><Icon.plus /> Добавить мероприятие</button>
     </>
   )
 }

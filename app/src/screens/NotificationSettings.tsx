@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Screen, TopBar, Toggle } from '../components'
 
 const initial = [
-  { id: 'act', label: 'Новые активности', on: true },
+  { id: 'act', label: 'Новые мероприятия', on: true },
   { id: 'rem', label: 'Напоминания (24ч / 2ч)', on: true },
   { id: 'debt', label: 'Напоминания о долгах', on: false },
   { id: 'prompt', label: 'Photo-prompt «сделай фото»', on: true },

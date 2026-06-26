@@ -23,7 +23,7 @@ export default function ActivityNew() {
     const startTime = date ? new Date(`${date}T${time || '12:00'}`).toISOString() : undefined
     create.mutate(
       {
-        title: title.trim() || 'Новая активность',
+        title: title.trim() || 'Новое мероприятие',
         startTime,
         description: desc.trim() || undefined,
         activityUrl: url.trim() || undefined,
@@ -36,7 +36,7 @@ export default function ActivityNew() {
 
   return (
     <Screen nav={false}>
-      <TopBar title="Новая активность" onBack={() => nav(-1)} />
+      <TopBar title="Новое мероприятие" onBack={() => nav(-1)} />
 
       <div className="field"><label>Название</label><input placeholder="Музей Пикассо" value={title} onChange={(e) => setTitle(e.target.value)} /></div>
       <div style={{ display: 'flex', gap: 11 }}>

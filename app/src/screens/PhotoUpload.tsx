@@ -7,9 +7,9 @@ import { uploadMemory } from '../lib/uploads'
 import { tg } from '../lib/tg'
 
 const phases = [
-  { id: 'before_activity', label: 'До активности' },
+  { id: 'before_activity', label: 'До мероприятия' },
   { id: 'during_activity', label: 'Во время' },
-  { id: 'after_activity', label: 'После активности' },
+  { id: 'after_activity', label: 'После мероприятия' },
   { id: 'before_trip', label: 'До поездки' },
   { id: 'after_trip', label: 'После поездки' },
 ]

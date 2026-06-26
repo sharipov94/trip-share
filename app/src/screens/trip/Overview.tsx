@@ -52,7 +52,7 @@ export default function Overview() {
       <div className="sec"><h2>Ближайшие</h2><div className="line" />
         <button className="cnt" onClick={() => nav(`/trip/${id}/activities`)}>Все →</button></div>
       {upcoming.length === 0 ? (
-        <Empty text="Активностей пока нет" />
+        <Empty text="Мероприятий пока нет" />
       ) : upcoming.map((a) => (
         <div key={a.id} className={'act' + (a.night ? ' night' : '')} style={{ cursor: 'pointer' }} onClick={() => nav('/activity/' + a.id)}>
           <div className="bar" /><div className="time"><b>{a.time || '—'}</b><s>{a.part}</s></div>

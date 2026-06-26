@@ -30,7 +30,7 @@ export default function ActivityDetails() {
 
   return (
     <Screen nav={false}>
-      <TopBar title="Активность" onBack={() => nav(-1)} right={
+      <TopBar title="Мероприятие" onBack={() => nav(-1)} right={
         act ? <button className="btn-ghost" style={{ padding: '8px 12px', fontSize: 12.5 }} onClick={() => nav('/activity/' + id + '/edit')}>Изменить</button> : undefined
       } />
       {isLoading && <Loading />}

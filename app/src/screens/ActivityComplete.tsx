@@ -24,7 +24,7 @@ export default function ActivityComplete() {
     tg.haptic('medium')
     // создаём расход на сумму активности, затем помечаем её завершённой
     createExpense.mutate(
-      { amount: Number(amount), currency: trip?.baseCurrency || 'EUR', category: 'activity', title: act?.title || 'Активность' },
+      { amount: Number(amount), currency: trip?.baseCurrency || 'EUR', category: 'activity', title: act?.title || 'Мероприятие' },
       {
         onSettled: () => {
           if (id) complete.mutate(id, { onSettled: () => nav('/balance') })
@@ -39,7 +39,7 @@ export default function ActivityComplete() {
       <TopBar title="Завершение" onBack={() => nav(-1)} />
 
       <div style={{ textAlign: 'center', marginBottom: 6 }}>
-        <div className="ttl" style={{ fontSize: 18 }}>{act?.title ?? 'Активность'}</div>
+        <div className="ttl" style={{ fontSize: 18 }}>{act?.title ?? 'Мероприятие'}</div>
         <div className="sub">Внеси фактическую стоимость</div>
       </div>
 

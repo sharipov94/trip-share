@@ -17,7 +17,7 @@ it('renders the four trip tab links', () => {
       </MemoryRouter>
     </QueryClientProvider>,
   )
-  for (const label of ['Обзор', 'Расходы', 'Активности', 'Фото']) {
+  for (const label of ['Обзор', 'Расходы', 'Мероприятия', 'Фото']) {
     expect(screen.getByText(label)).toBeTruthy()
   }
 })
