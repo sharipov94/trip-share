@@ -78,7 +78,7 @@ export const trips = {
     return api(`/trips/${id}`, { method: 'PATCH', body })
   },
   /** Загрузить/сменить обложку поездки. */
-  async uploadCover(id: string, file: File) {
+  async uploadCover(id: string, file: File): Promise<{ coverUrl: string }> {
     if (MOCK) return wait({ coverUrl: URL.createObjectURL(file) })
     const form = new FormData()
     form.append('photo', file)

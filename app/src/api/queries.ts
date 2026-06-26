@@ -97,8 +97,10 @@ export function useUploadCover(tripId: string) {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (file: File) => trips.uploadCover(tripId, file),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: qk.trip(tripId) })
+    onSuccess: (data) => {
+      // пишем обложку прямо в кэш поездки. НЕ инвалидируем trip: в MOCK рефетч
+      // вернул бы поездку без coverUrl и затёр бы её (а в проде GET и так её отдаёт).
+      qc.setQueryData<Trip>(qk.trip(tripId), (old) => (old ? { ...old, coverUrl: data.coverUrl } : old))
       qc.invalidateQueries({ queryKey: qk.trips })
     },
   })
