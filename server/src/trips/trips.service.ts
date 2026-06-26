@@ -80,7 +80,8 @@ export class TripsService {
   }
 
   async setCover(userId: string, tripId: string, file: Express.Multer.File): Promise<{ coverUrl: string }> {
-    await this.membership.assertRole(userId, tripId, ['owner', 'admin'])
+    // обложку может ставить любой участник (как фото/воспоминания), не только owner/admin
+    await this.membership.assertMember(userId, tripId)
     if (!file) throw new BadRequestException('Файл не передан')
     if (!['image/jpeg', 'image/png', 'image/webp', 'image/heic'].includes(file.mimetype))
       throw new BadRequestException('Только изображения')
